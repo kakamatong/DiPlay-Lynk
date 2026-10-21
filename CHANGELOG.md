@@ -1,3 +1,9 @@
+# DiPlay 0.3.23 — 2026-10-21
+
+- Arrow-channel test: sweep turn IDs 100-130 through the int overload and show the current ID while a test runs.
+- ILaneInfo probe: run direct `updateLaneInfo` passes (id=-1, id=0, id=102/103/109) with lane bitmaps, plus an `updateNavigationInfo.getLaneInfo()` aggregate pass.
+- ECARX HUD bridge and lane-probe refactor; settings strings updated in all bundled languages.
+
 # DiPlay 0.3.22 — 2026-10-21
 
 - Add the ECARX ILaneInfo probe with diagnostic output and a settings entry.
