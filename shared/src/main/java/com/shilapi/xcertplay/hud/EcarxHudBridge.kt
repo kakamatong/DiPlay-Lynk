@@ -1026,15 +1026,10 @@ internal object EcarxHudBridge {
                 if (naviRef == null) {
                     "ECARX DIM navigation interface is not ready. Open CarPlay once, then retry."
                 } else {
-                    val wasActive = synchronized(lock) { lastPushed != null }
-                    val probeReport = EcarxLaneProbe.probe(naviRef)
-                    // The aggregate pass pushes a fake LANE PROBE card. Clear it only when no live
-                    // route owned the cluster; an active navigation must not be stopped here.
-                    if (!wasActive && synchronized(lock) { lastPushed == null }) {
-                        EcarxDimApi.notifyTurnByTurnStopped(naviRef)
-                        EcarxDimApi.updateLaneInfoEmpty(naviRef)
-                    }
-                    probeReport
+                    // Leave the last spy lanes on the cluster so they can be inspected. The next
+                    // live guidance frame (or session end) overwrites/clears them; an active route
+                    // is never stopped here.
+                    EcarxLaneProbe.probe(naviRef)
                 }
             }.getOrElse { error ->
                 "lane probe failed: " + error.javaClass.simpleName + ": " + error.message

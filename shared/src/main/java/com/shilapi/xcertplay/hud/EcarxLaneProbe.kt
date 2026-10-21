@@ -16,9 +16,11 @@ import java.lang.reflect.Proxy
  *
  * ECARX ships no SDK docs, so the only definition of `ILaneInfo` is the system image itself. The
  * Settings button first dumps the interface as the runtime sees it, then runs several spy passes
- * through both entry points that accept lanes: `updateLaneInfo(ILaneInfo[])` and
- * `updateNavigationInfo(INavigationInfo).getLaneInfo()`. Every call the platform makes on a spy is
- * recorded with the value the spy returned, which names the fields the car actually reads.
+ * through `updateLaneInfo(ILaneInfo[])`. Every call the platform makes on a spy is recorded with
+ * the value the spy returned, which names the fields the car actually reads.
+ *
+ * The aggregate `INavigationInfo.getLaneInfo()` path is not part of this probe: one run showed no
+ * calls at all, and setting it up pushes a fake navigation card that obscures the lane area.
  *
  * Nothing here is used by the live guidance path. A failure only affects the diagnostic report.
  */
@@ -95,7 +97,13 @@ internal object EcarxLaneProbe {
                     LaneValue(arrowIds[index % arrowIds.size], index + 1, laneBitmap(index))
                 },
             )
-            appendLine(runAggregate(navi, lane))
+            // Last pass: only the three turn IDs, no Bitmap, zero-based lane numbers. It runs last
+            // so the cluster keeps this exact state visible after the probe returns.
+            appendLine(
+                runDirect(navi, lane, "updateLaneInfo, id=102/103/109, laneNumber=0/1/2, no Bitmap") { index ->
+                    LaneValue(arrowIds[index % arrowIds.size], index, null)
+                },
+            )
         }.trimEnd()
     }
 
@@ -110,20 +118,6 @@ internal object EcarxLaneProbe {
             .getOrElse { return "$label:\n  -> proxy failed: ${describe(it)}" }
         val result = EcarxDimApi.updateLaneInfo(navi, array)
         return renderRun(label, result, calls)
-    }
-
-    private fun runAggregate(navi: Any, lane: Class<*>): String {
-        val calls: MutableList<String> = java.util.Collections.synchronizedList(mutableListOf<String>())
-        val array = runCatching {
-            spyArray(lane, { index -> LaneValue(-1, index + 1, laneBitmap(index)) }, calls)
-        }.getOrElse { return "updateNavigationInfo.getLaneInfo:\n  -> proxy failed: ${describe(it)}" }
-        val guidance = EcarxDimApi.Guidance(
-            status = 1,
-            nextGuidancePointName = "LANE PROBE",
-            laneInfo = array,
-        )
-        val result = EcarxDimApi.updateNavigationInfo(navi, guidance)
-        return renderRun("updateNavigationInfo.getLaneInfo, id=-1 + Bitmap + laneNumber", result, calls)
     }
 
     private fun spyArray(
