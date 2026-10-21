@@ -1,3 +1,9 @@
+# DiPlay 0.3.24 — 2026-10-21
+
+- Live HUD arrows now use the numeric `updateTurnByTurnArrow(int)` turn-ID channel (101 start, 102 left, 103 right, ...); the SVG string is calibration-only and `getNavigationTurnSVG` returns empty.
+- Arrow diagnostics: sweep turn IDs 131-200 in a new test alongside the existing 100-130 sweep.
+- ILaneInfo probe updated; add `docs/ECARX-LANE-INFO.md` and `docs/ECARX-TURN-IDS.md`.
+
 # DiPlay 0.3.23 — 2026-10-21
 
 - Arrow-channel test: sweep turn IDs 100-130 through the int overload and show the current ID while a test runs.
