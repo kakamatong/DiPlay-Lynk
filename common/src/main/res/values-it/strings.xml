@@ -1013,13 +1013,14 @@
     <string name="settings_ecarx_navi_mode_off">Lascia la sorgente dell’auto</string>
     <string name="settings_ecarx_navi_mode_on">Preferisci la navigazione di CarPlay</string>
     <string name="settings_ecarx_turn_arrow">Invia icone delle frecce (sperimentale)</string>
-    <string name="settings_ecarx_turn_arrow_description">Invia la freccia di ogni manovra come icona SVG. Attivo per impostazione predefinita; disattivalo per lasciare al quadro la sua freccia.</string>
+    <string name="settings_ecarx_turn_arrow_description">Invia la freccia di ogni manovra come icona turn ID di ECARX. Attivo per impostazione predefinita; disattivalo per lasciare al quadro la sua freccia.</string>
     <string name="settings_ecarx_lane_probe">Sonda ILaneInfo (sperimentale)</string>
     <string name="settings_ecarx_lane_probe_title">Esito della sonda ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Elenca i metodi di ILaneInfo, poi invia corsie proxy e registra i getter letti dal veicolo. Eseguilo solo a veicolo fermo; la sonda richiede il controllo di navigazione DIM.</string>
     <string name="settings_ecarx_unavailable">L’auto ha rifiutato la richiesta</string>
     <string name="settings_ecarx_arrow_test">Prova ID di svolta 100–130 (sperimentale)</string>
-    <string name="settings_ecarx_arrow_test_description">Ogni pulsante invia solo la propria chiamata della freccia, un passo ogni 2 secondi; premi di nuovo per ricominciare. Gli ID di svolta vanno da 100 a 130, mentre le prove bitmap e SVG percorrono le manovre di base: dritto, svolte, inversione a U, rotatoria e arrivo.</string>
+    <string name="settings_ecarx_arrow_test_high">Prova ID di svolta 131–200 (sperimentale)</string>
+    <string name="settings_ecarx_arrow_test_description">Ogni pulsante invia solo la propria chiamata della freccia, un passo ogni 2 secondi; premi di nuovo per ricominciare. Gli ID di svolta vanno da 100 a 130 e da 131 a 200, mentre le prove bitmap e SVG percorrono le manovre di base: dritto, svolte, inversione a U, rotatoria e arrivo.</string>
     <string name="settings_ecarx_arrow_test_idle">Nessun test in corso</string>
     <string name="settings_ecarx_arrow_test_current">ID corrente %1$d</string>
     <string name="settings_ecarx_bitmap_test">Prova frecce bitmap (sperimentale)</string>

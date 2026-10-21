@@ -923,13 +923,14 @@
     <string name="settings_ecarx_navi_mode_off">Оставить собственный источник автомобиля</string>
     <string name="settings_ecarx_navi_mode_on">Предпочитать навигацию CarPlay</string>
     <string name="settings_ecarx_turn_arrow">Отправка значков стрелок (экспериментально)</string>
-    <string name="settings_ecarx_turn_arrow_description">Отправляет стрелку каждого манёвра как SVG-значок. Включено по умолчанию; выключите, чтобы щиток показывал свою стрелку.</string>
+    <string name="settings_ecarx_turn_arrow_description">Отправляет стрелку каждого манёвра как значок turn ID ECARX. Включено по умолчанию; выключите, чтобы щиток показывал свою стрелку.</string>
     <string name="settings_ecarx_lane_probe">Проверка ILaneInfo (экспериментально)</string>
     <string name="settings_ecarx_lane_probe_title">Результат проверки ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Сначала выводит методы ILaneInfo, затем отправляет прокси-полосы и записывает геттеры, которые читает автомобиль. Запускайте только на стоящем автомобиле; для отправки нужен навигационный дескриптор DIM.</string>
     <string name="settings_ecarx_unavailable">Автомобиль отклонил запрос</string>
     <string name="settings_ecarx_arrow_test">Проверка ID поворота 100–130 (экспериментально)</string>
-    <string name="settings_ecarx_arrow_test_description">Каждая кнопка отправляет только соответствующий вызов стрелки, по одному шагу каждые 2 секунды; повторное нажатие начинает заново. ID поворота идут от 100 до 130, а тесты растра и SVG перебирают базовые манёвры: прямо, поворот, разворот, круговое движение, прибытие.</string>
+    <string name="settings_ecarx_arrow_test_high">Проверка ID поворота 131–200 (экспериментально)</string>
+    <string name="settings_ecarx_arrow_test_description">Каждая кнопка отправляет только соответствующий вызов стрелки, по одному шагу каждые 2 секунды; повторное нажатие начинает заново. ID поворота идут от 100 до 130 и от 131 до 200, а тесты растра и SVG перебирают базовые манёвры: прямо, поворот, разворот, круговое движение, прибытие.</string>
     <string name="settings_ecarx_arrow_test_idle">Проверка не запущена</string>
     <string name="settings_ecarx_arrow_test_current">Текущий ID %1$d</string>
     <string name="settings_ecarx_bitmap_test">Проверка стрелок растром (экспериментально)</string>

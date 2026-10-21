@@ -1741,7 +1741,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
     private fun ecarxArrowTestText(step: EcarxArrowTestStep?): String {
         if (step == null) return getString(R.string.settings_ecarx_arrow_test_idle)
         return when (step.kind) {
-            EcarxArrowTestKind.TURN_ID ->
+            EcarxArrowTestKind.TURN_ID, EcarxArrowTestKind.TURN_ID_HIGH ->
                 getString(R.string.settings_ecarx_arrow_test_current, step.turnId)
             EcarxArrowTestKind.BITMAP -> getString(
                 R.string.settings_ecarx_arrow_bitmap_step,
@@ -2487,13 +2487,19 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             // The arrow-channel tests are calibration aids; this switch keeps them out of release
             // builds when they are not needed.
             if (SHOW_ECARX_ARROW_TESTS) {
-                // The three arrow channels are the open question on this head unit; each test
+                // The four arrow channels are the open question on this head unit; each test
                 // drives exactly one of them. The readout follows the step actually pushed.
                 val initialStep = ecarx.arrowTestStep()
                 val testStatus = label(ecarxArrowTestText(initialStep), 16, MUTED)
                 styleEcarxArrowTestStatus(testStatus, active = initialStep != null)
                 card.addView(
                     ecarxArrowTestButton(R.string.settings_ecarx_arrow_test, EcarxArrowTestKind.TURN_ID, testStatus),
+                    matchButton(0, 60),
+                )
+                card.addView(
+                    ecarxArrowTestButton(
+                        R.string.settings_ecarx_arrow_test_high, EcarxArrowTestKind.TURN_ID_HIGH, testStatus,
+                    ),
                     matchButton(0, 60),
                 )
                 card.addView(

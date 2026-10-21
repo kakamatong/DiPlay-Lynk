@@ -984,13 +984,14 @@
     <string name="settings_ecarx_navi_mode_off">保持车机自带导航</string>
     <string name="settings_ecarx_navi_mode_on">优先使用 CarPlay 导航</string>
     <string name="settings_ecarx_turn_arrow">发送转向箭头（实验性）</string>
-    <string name="settings_ecarx_turn_arrow_description">把每个机动动作的转向箭头以 SVG 图标发送到仪表。默认开启；关闭后仪表保留自己的箭头。</string>
+    <string name="settings_ecarx_turn_arrow_description">把每个机动动作的转向箭头以 ECARX turn ID 图标发送到仪表。默认开启；关闭后仪表保留自己的箭头。</string>
     <string name="settings_ecarx_lane_probe">探测 ILaneInfo（实验性）</string>
     <string name="settings_ecarx_lane_probe_title">ILaneInfo 探测结果</string>
     <string name="settings_ecarx_lane_probe_hint">先列出 ILaneInfo 的方法，再推送几条代理车道，记录车机实际读取的 getter。请仅在停车时运行；代理推送需要 DIM 导航句柄。</string>
     <string name="settings_ecarx_unavailable">车机拒绝了这次请求</string>
     <string name="settings_ecarx_arrow_test">测试转向 ID 100–130（实验性）</string>
-    <string name="settings_ecarx_arrow_test_description">三个按钮各自只调用对应的转向箭头接口，每 2 秒推进一步；再次按下会从头开始。转向 ID 从 100 到 130，位图和 SVG 测试依次送直行、转向、掉头、环岛、到达等基本图形。</string>
+    <string name="settings_ecarx_arrow_test_high">测试转向 ID 131–200（实验性）</string>
+    <string name="settings_ecarx_arrow_test_description">四个按钮各自只调用对应的转向箭头接口，每 2 秒推进一步；再次按下会从头开始。转向 ID 分为 100–130 和 131–200 两段，位图和 SVG 测试依次送直行、转向、掉头、环岛、到达等基本图形。</string>
     <string name="settings_ecarx_arrow_test_idle">未在测试</string>
     <string name="settings_ecarx_arrow_test_current">当前 ID %1$d</string>
     <string name="settings_ecarx_bitmap_test">测试箭头位图（实验性）</string>

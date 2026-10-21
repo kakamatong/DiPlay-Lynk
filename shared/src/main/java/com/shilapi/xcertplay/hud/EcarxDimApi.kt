@@ -34,7 +34,7 @@ import java.lang.reflect.Proxy
  * DimInteraction.setPresentationToDimSwitch(int,String,String,boolean)  <- 仪表投屏开关, returns void
  * INaviInteraction.updateNavigationInfo(INavigationInfo)
  * INaviInteraction.updateTurnByTurnArrow(int) | (String) | (Bitmap)
- *   (the live path uses String; int and Bitmap are calibration-only)
+ *   (the live path uses int; String and Bitmap are calibration-only)
  * INaviInteraction.updateDistanceToNextGuidancePoint(int)
  * INaviInteraction.updateDistanceToDestination(int)
  * INaviInteraction.updateETA(int)
@@ -86,7 +86,6 @@ internal object EcarxDimApi {
         val muteState: Int = 0,
         val dayNightMode: Int = 0,
         val nextGuidancePointName: String = "",
-        val navigationTurnSvg: String = "",
         /** Diagnostic-only lane payload for the ILaneInfo probe; live guidance leaves it null. */
         val laneInfo: Any? = null,
     )
@@ -141,9 +140,8 @@ internal object EcarxDimApi {
     }
 
     /**
-     * The numeric `updateTurnByTurnArrow(int)` overload. The live guidance push does not use it
-     * (the code table is a demo ramp on this firmware); it exists for the Settings calibration
-     * sweep only.
+     * The numeric `updateTurnByTurnArrow(int)` overload, the live arrow channel. The ID is the
+     * ECARX turn-icon table entry recovered on the car (101 start, 102 left, 103 right, ...).
      */
     fun updateTurnByTurnArrow(navi: Any, arrow: Int): EcarxResult =
         callInt(navi, "updateTurnByTurnArrow", arrow)
@@ -160,7 +158,7 @@ internal object EcarxDimApi {
         call(navi, "updateTurnByTurnArrow", arrayOf(android.graphics.Bitmap::class.java), arrayOf<Any?>(arrow),
             "updateTurnByTurnArrow(Bitmap)")
 
-    /** The arrow channel the live guidance push uses: a drawn SVG icon as a String. */
+    /** The drawn-SVG overload, kept only for the Settings SVG calibration test. */
     fun updateTurnByTurnArrow(navi: Any, svg: String): EcarxResult =
         call(navi, "updateTurnByTurnArrow", arrayOf(String::class.java), arrayOf<Any?>(svg),
             "updateTurnByTurnArrow(String)")
@@ -331,7 +329,7 @@ internal object EcarxDimApi {
             "getHighwayExitInfo" -> null
             "getRoadCameraInfo" -> null
             "getServiceAreaInfo" -> null
-            "getNavigationTurnSVG" -> g.navigationTurnSvg
+            "getNavigationTurnSVG" -> ""
             // toString/hashCode/equals must stay sane so the platform can log the object.
             "toString" ->
                 "EcarxNavigationInfo(turn=${g.turnId} next=${g.distanceToNextMeters} dest=${g.distanceToDestinationMeters})"

@@ -73,8 +73,8 @@ object EcarxOutputSettings {
     }
 
     /**
-     * Whether the CarPlay maneuver is also pushed as a drawn SVG arrow. On by default: it is the
-     * only arrow channel this port uses now, so without it the cluster falls back to whatever
+     * Whether the CarPlay maneuver is also pushed as an ECARX turn-ID icon. On by default: it is
+     * the only arrow channel this port uses now, so without it the cluster falls back to whatever
      * arrow it derives from [EcarxHudBridge]'s navigation payload.
      */
     fun turnArrowExperimental(context: Context): Boolean =
@@ -108,10 +108,10 @@ object EcarxOutputSettings {
     // ---------------------------------------------------------------- arrow-channel tests (diagnostic)
 
     /**
-     * Runs one arrow channel for calibration: turn IDs 100..130, or the basic maneuvers through
-     * the bitmap or SVG overload, one step every 2 seconds. Applies at once, leaves the saved
-     * settings alone, and normal guidance resumes when the test ends. [onStep] runs on a worker
-     * thread.
+     * Runs one arrow channel for calibration: turn IDs 100..200 (in two ranges), or the basic
+     * maneuvers through the bitmap or SVG overload, one step every 2 seconds. Applies at once,
+     * leaves the saved settings alone, and normal guidance resumes when the test ends. [onStep]
+     * runs on a worker thread.
      */
     fun startArrowTest(
         context: Context,

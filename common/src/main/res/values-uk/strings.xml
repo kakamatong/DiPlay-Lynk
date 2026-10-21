@@ -935,13 +935,14 @@
     <string name="settings_ecarx_navi_mode_off">Залишити власне джерело автомобіля</string>
     <string name="settings_ecarx_navi_mode_on">Надавати перевагу навігації CarPlay</string>
     <string name="settings_ecarx_turn_arrow">Надсилання значків стрілок (експериментально)</string>
-    <string name="settings_ecarx_turn_arrow_description">Надсилає стрілку кожного маневру як SVG-значок. Увімкнено за замовчуванням; вимкніть, щоб панель показувала свою стрілку.</string>
+    <string name="settings_ecarx_turn_arrow_description">Надсилає стрілку кожного маневру як значок turn ID ECARX. Увімкнено за замовчуванням; вимкніть, щоб панель показувала свою стрілку.</string>
     <string name="settings_ecarx_lane_probe">Перевірка ILaneInfo (експериментально)</string>
     <string name="settings_ecarx_lane_probe_title">Результат перевірки ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Спочатку виводить методи ILaneInfo, потім надсилає проксі-смуги й записує гетери, які читає автомобіль. Запускайте лише на автомобілі, що стоїть; для надсилання потрібен навігаційний дескриптор DIM.</string>
     <string name="settings_ecarx_unavailable">Автомобіль відхилив запит</string>
     <string name="settings_ecarx_arrow_test">Перевірка ID повороту 100–130 (експериментально)</string>
-    <string name="settings_ecarx_arrow_test_description">Кожна кнопка надсилає лише відповідний виклик стрілки, по одному кроку кожні 2 секунди; повторне натискання починає спочатку. ID повороту йдуть від 100 до 130, а тести растру й SVG перебирають базові маневри: прямо, поворот, розворот, круговий рух, прибуття.</string>
+    <string name="settings_ecarx_arrow_test_high">Перевірка ID повороту 131–200 (експериментально)</string>
+    <string name="settings_ecarx_arrow_test_description">Кожна кнопка надсилає лише відповідний виклик стрілки, по одному кроку кожні 2 секунди; повторне натискання починає спочатку. ID повороту йдуть від 100 до 130 і від 131 до 200, а тести растру й SVG перебирають базові маневри: прямо, поворот, розворот, круговий рух, прибуття.</string>
     <string name="settings_ecarx_arrow_test_idle">Перевірку не запущено</string>
     <string name="settings_ecarx_arrow_test_current">Поточний ID %1$d</string>
     <string name="settings_ecarx_bitmap_test">Перевірка стрілок растром (експериментально)</string>

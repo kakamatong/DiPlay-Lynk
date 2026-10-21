@@ -1,14 +1,15 @@
 package com.shilapi.xcertplay.hud
 
 /**
- * The three arrow channels, as exercised by the Settings diagnostics.
+ * The four arrow channels, as exercised by the Settings diagnostics.
  *
- * [TURN_ID] is the numeric `updateTurnByTurnArrow(int)` channel, swept over 100..130 on the car to
- * look for icons in that range. [BITMAP] and [SVG] carry an icon instead of a code, so they are
- * swept over the basic maneuvers in [EcarxArrowShape].
+ * [TURN_ID] and [TURN_ID_HIGH] sweep the numeric `updateTurnByTurnArrow(int)` channel over
+ * 100..130 and 131..200 on the car, to map the icon table. [BITMAP] and [SVG] carry an icon
+ * instead of a code, so they are swept over the basic maneuvers in [EcarxArrowShape].
  */
 enum class EcarxArrowTestKind {
     TURN_ID,
+    TURN_ID_HIGH,
     BITMAP,
     SVG,
 }

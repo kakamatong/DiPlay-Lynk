@@ -983,13 +983,14 @@
     <string name="settings_ecarx_navi_mode_off">保持車機自帶導航</string>
     <string name="settings_ecarx_navi_mode_on">優先使用 CarPlay 導航</string>
     <string name="settings_ecarx_turn_arrow">傳送轉向箭頭（實驗性）</string>
-    <string name="settings_ecarx_turn_arrow_description">把每個機動動作的轉向箭頭以 SVG 圖示傳送到儀表。預設開啟；關閉後儀表保留自己的箭頭。</string>
+    <string name="settings_ecarx_turn_arrow_description">把每個機動動作的轉向箭頭以 ECARX turn ID 圖示傳送到儀表。預設開啟；關閉後儀表保留自己的箭頭。</string>
     <string name="settings_ecarx_lane_probe">探測 ILaneInfo（實驗性）</string>
     <string name="settings_ecarx_lane_probe_title">ILaneInfo 探測結果</string>
     <string name="settings_ecarx_lane_probe_hint">先列出 ILaneInfo 的方法，再推送幾條代理車道，記錄車機實際讀取的 getter。請僅在停車時執行；代理推送需要 DIM 導航句柄。</string>
     <string name="settings_ecarx_unavailable">車機拒絕了這次請求</string>
     <string name="settings_ecarx_arrow_test">測試轉向 ID 100–130（實驗性）</string>
-    <string name="settings_ecarx_arrow_test_description">三個按鈕各自只呼叫對應的轉向箭頭介面，每 2 秒推進一步；再次按下會從頭開始。轉向 ID 從 100 到 130，點陣圖和 SVG 測試依序送直行、轉向、迴轉、圓環、抵達等基本圖形。</string>
+    <string name="settings_ecarx_arrow_test_high">測試轉向 ID 131–200（實驗性）</string>
+    <string name="settings_ecarx_arrow_test_description">四個按鈕各自只呼叫對應的轉向箭頭介面，每 2 秒推進一步；再次按下會從頭開始。轉向 ID 分為 100–130 和 131–200 兩段，點陣圖和 SVG 測試依序送直行、轉向、迴轉、圓環、抵達等基本圖形。</string>
     <string name="settings_ecarx_arrow_test_idle">未在測試</string>
     <string name="settings_ecarx_arrow_test_current">目前 ID %1$d</string>
     <string name="settings_ecarx_bitmap_test">測試箭頭點陣圖（實驗性）</string>
