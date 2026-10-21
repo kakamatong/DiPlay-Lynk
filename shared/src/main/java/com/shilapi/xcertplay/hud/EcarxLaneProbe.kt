@@ -1,5 +1,9 @@
 package com.shilapi.xcertplay.hud
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.Log
 import java.lang.reflect.Array as ReflectArray
 import java.lang.reflect.InvocationHandler
@@ -11,16 +15,19 @@ import java.lang.reflect.Proxy
  * Diagnostic probe for the opaque `ILaneInfo` contract.
  *
  * ECARX ships no SDK docs, so the only definition of `ILaneInfo` is the system image itself. The
- * Settings button first dumps the interface as the runtime sees it, then pushes one `ILaneInfo[]`
- * of spies through `updateLaneInfo`. Every call the platform makes on a spy is recorded with the
- * value the spy returned, which names the fields the car actually reads; the values can then be
- * compared with Apple's 0x5204 lane data.
+ * Settings button first dumps the interface as the runtime sees it, then runs several spy passes
+ * through both entry points that accept lanes: `updateLaneInfo(ILaneInfo[])` and
+ * `updateNavigationInfo(INavigationInfo).getLaneInfo()`. Every call the platform makes on a spy is
+ * recorded with the value the spy returned, which names the fields the car actually reads.
  *
  * Nothing here is used by the live guidance path. A failure only affects the diagnostic report.
  */
 internal object EcarxLaneProbe {
     private const val TAG = "DiPlay-ECARX-Lane"
     private const val SPY_LANES = 3
+
+    /** The values one spy lane answers with. */
+    private data class LaneValue(val id: Int, val number: Int, val icon: Bitmap?)
 
     fun probe(navi: Any): String {
         val lane = runCatching { Class.forName(EcarxCapabilities.LANE_INFO) }.getOrNull()
@@ -71,92 +78,141 @@ internal object EcarxLaneProbe {
         if (!lane.isInterface) {
             return "skipped: ILaneInfo is a class, not an interface; inspect the constructors above"
         }
-        val calls = java.util.Collections.synchronizedList(mutableListOf<String>())
-        val array = ReflectArray.newInstance(lane, SPY_LANES)
-        for (index in 0 until SPY_LANES) {
-            val handler = InvocationHandler { proxy, method, args ->
-                val value = if (method.name == "equals") {
-                    proxy === args?.firstOrNull()
-                } else {
-                    invocationValue(proxy, method, index)
-                }
-                calls += "lane$index." + method.name + "(" + (args?.joinToString(",") ?: "") +
-                    ") -> " + render(value)
-                value
-            }
-            val spy = runCatching {
-                Proxy.newProxyInstance(lane.classLoader, arrayOf(lane), handler)
-            }.getOrElse {
-                return "proxy failed: " + describe(it)
-            }
-            ReflectArray.set(array, index, spy)
-        }
-        val result = EcarxDimApi.updateLaneInfo(navi, array)
-        // The client SDK normally marshals the array before the binder call returns; this sleep is
-        // only for a firmware that reads the getters on a worker thread.
-        if (calls.isEmpty()) Thread.sleep(100)
-        val captured = synchronized(calls) { calls.toList() }
+        val arrowIds = intArrayOf(102, 103, 109)
         return buildString {
             appendLine(
-                "updateLaneInfo(" + SPY_LANES + " lanes) -> " +
-                    if (result.ok) "accepted" else "failed: " + result.reason,
+                runDirect(navi, lane, "updateLaneInfo, id=-1 + Bitmap + laneNumber") { index ->
+                    LaneValue(-1, index + 1, laneBitmap(index))
+                },
             )
-            if (captured.isEmpty()) {
-                appendLine("no getter was read; the platform may ignore lane data outside navigation")
-            } else {
-                appendLine("interface calls read " + captured.size + " times:")
-                captured.forEachIndexed { position, call -> appendLine("  $position: $call") }
-            }
+            appendLine(
+                runDirect(navi, lane, "updateLaneInfo, id=0 + Bitmap + laneNumber") { index ->
+                    LaneValue(0, index + 1, laneBitmap(index))
+                },
+            )
+            appendLine(
+                runDirect(navi, lane, "updateLaneInfo, id=102/103/109 + Bitmap + laneNumber") { index ->
+                    LaneValue(arrowIds[index % arrowIds.size], index + 1, laneBitmap(index))
+                },
+            )
+            appendLine(runAggregate(navi, lane))
         }.trimEnd()
     }
 
-    private fun invocationValue(proxy: Any, method: Method, index: Int): Any? {
-        when (method.name) {
-            "toString" -> return "ILaneInfoProbe[$index]"
-            "hashCode" -> return System.identityHashCode(proxy)
-            "describeContents" -> return 0
-            "writeToParcel" -> return null
-        }
-        val type = method.returnType
-        return when {
-            type == java.lang.Boolean.TYPE -> index % 2 == 0
-            type == java.lang.Byte.TYPE -> index.toByte()
-            type == java.lang.Short.TYPE -> index.toShort()
-            type == java.lang.Integer.TYPE -> index
-            type == java.lang.Long.TYPE -> index.toLong()
-            type == java.lang.Float.TYPE -> index.toFloat()
-            type == java.lang.Double.TYPE -> index.toDouble()
-            type == java.lang.Character.TYPE -> '0' + index
-            type == String::class.java -> "lane?$index"
-            type.isArray -> arrayValue(type.componentType, index)
-            else -> null
-        }
+    private fun runDirect(
+        navi: Any,
+        lane: Class<*>,
+        label: String,
+        value: (Int) -> LaneValue,
+    ): String {
+        val calls: MutableList<String> = java.util.Collections.synchronizedList(mutableListOf<String>())
+        val array = runCatching { spyArray(lane, value, calls) }
+            .getOrElse { return "$label:\n  -> proxy failed: ${describe(it)}" }
+        val result = EcarxDimApi.updateLaneInfo(navi, array)
+        return renderRun(label, result, calls)
     }
 
-    private fun arrayValue(component: Class<*>, index: Int): Any {
-        val array = ReflectArray.newInstance(component, 1)
-        when (component) {
-            java.lang.Boolean.TYPE -> ReflectArray.setBoolean(array, 0, index % 2 == 0)
-            java.lang.Byte.TYPE -> ReflectArray.setByte(array, 0, (index * 45).toByte())
-            java.lang.Short.TYPE -> ReflectArray.setShort(array, 0, (index * 45).toShort())
-            java.lang.Integer.TYPE -> ReflectArray.setInt(array, 0, index * 45)
-            java.lang.Long.TYPE -> ReflectArray.setLong(array, 0, index * 45L)
-            java.lang.Float.TYPE -> ReflectArray.setFloat(array, 0, index * 45f)
-            java.lang.Double.TYPE -> ReflectArray.setDouble(array, 0, index * 45.0)
-            java.lang.Character.TYPE -> ReflectArray.setChar(array, 0, '0' + index)
-            String::class.java -> ReflectArray.set(array, 0, "lane?$index")
-            else -> return array
+    private fun runAggregate(navi: Any, lane: Class<*>): String {
+        val calls: MutableList<String> = java.util.Collections.synchronizedList(mutableListOf<String>())
+        val array = runCatching {
+            spyArray(lane, { index -> LaneValue(-1, index + 1, laneBitmap(index)) }, calls)
+        }.getOrElse { return "updateNavigationInfo.getLaneInfo:\n  -> proxy failed: ${describe(it)}" }
+        val guidance = EcarxDimApi.Guidance(
+            status = 1,
+            nextGuidancePointName = "LANE PROBE",
+            laneInfo = array,
+        )
+        val result = EcarxDimApi.updateNavigationInfo(navi, guidance)
+        return renderRun("updateNavigationInfo.getLaneInfo, id=-1 + Bitmap + laneNumber", result, calls)
+    }
+
+    private fun spyArray(
+        lane: Class<*>,
+        value: (Int) -> LaneValue,
+        calls: MutableList<String>,
+    ): Any {
+        val array = ReflectArray.newInstance(lane, SPY_LANES)
+        for (index in 0 until SPY_LANES) {
+            val laneValue = value(index)
+            val handler = InvocationHandler { proxy, method, args ->
+                val result = when (method.name) {
+                    "getLaneBackIcon" -> laneValue.icon
+                    "getLaneBackIconId" -> laneValue.id
+                    "getLaneNumber" -> laneValue.number
+                    "toString" -> "ILaneInfoProbe[$index]"
+                    "hashCode" -> System.identityHashCode(proxy)
+                    "equals" -> proxy === args?.firstOrNull()
+                    else -> defaultValue(method.returnType)
+                }
+                calls += "lane$index." + method.name + "(" + (args?.joinToString(",") ?: "") +
+                    ") -> " + render(result)
+                result
+            }
+            val spy = Proxy.newProxyInstance(lane.classLoader, arrayOf(lane), handler)
+            ReflectArray.set(array, index, spy)
         }
         return array
     }
 
+    private fun renderRun(
+        label: String,
+        result: EcarxDimApi.EcarxResult,
+        calls: MutableList<String>,
+    ): String {
+        // The client normally marshals the array before the binder call returns; this sleep is
+        // only for a firmware that reads the getters on a worker thread.
+        if (calls.isEmpty()) Thread.sleep(100)
+        val captured = synchronized(calls) { calls.toList() }
+        return buildString {
+            appendLine("$label:")
+            appendLine("  -> " + if (result.ok) "accepted" else "failed: " + result.reason)
+            if (captured.isEmpty()) {
+                appendLine("  no interface call was observed")
+            } else {
+                captured.forEach { appendLine("  $it") }
+            }
+        }.trimEnd()
+    }
+
+    /** A 64x64 coloured tile with the lane number, so a rendered lane is easy to spot on the car. */
+    private fun laneBitmap(index: Int): Bitmap {
+        val size = 64
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.color = when (index) {
+            0 -> Color.RED
+            1 -> Color.GREEN
+            else -> Color.BLUE
+        }
+        canvas.drawRect(0f, 0f, size.toFloat(), size.toFloat(), paint)
+        paint.color = Color.WHITE
+        paint.textSize = 36f
+        paint.textAlign = Paint.Align.CENTER
+        canvas.drawText((index + 1).toString(), size / 2f, size * 0.68f, paint)
+        return bitmap
+    }
+
     private fun render(value: Any?): String {
         if (value == null) return "null"
+        if (value is Bitmap) return "Bitmap(" + value.width + "x" + value.height + ")"
         if (!value.javaClass.isArray) return value.toString()
         val length = ReflectArray.getLength(value)
         return (0 until length).joinToString(",", "[", "]") {
             ReflectArray.get(value, it)?.toString() ?: "null"
         }
+    }
+
+    private fun defaultValue(type: Class<*>): Any? = when (type) {
+        java.lang.Boolean.TYPE -> false
+        java.lang.Byte.TYPE -> 0.toByte()
+        java.lang.Short.TYPE -> 0.toShort()
+        java.lang.Integer.TYPE -> 0
+        java.lang.Long.TYPE -> 0L
+        java.lang.Float.TYPE -> 0f
+        java.lang.Double.TYPE -> 0.0
+        java.lang.Character.TYPE -> '\u0000'
+        else -> null
     }
 
     private fun signature(method: Method): String {

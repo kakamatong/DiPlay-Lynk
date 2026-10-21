@@ -1018,8 +1018,10 @@
     <string name="settings_ecarx_lane_probe_title">Esito della sonda ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Elenca i metodi di ILaneInfo, poi invia corsie proxy e registra i getter letti dal veicolo. Eseguilo solo a veicolo fermo; la sonda richiede il controllo di navigazione DIM.</string>
     <string name="settings_ecarx_unavailable">L’auto ha rifiutato la richiesta</string>
-    <string name="settings_ecarx_arrow_test_description">Ogni pulsante invia solo la chiamata della freccia selezionata, un passo ogni 2 secondi; premi di nuovo per ricominciare. Le prove bitmap e SVG percorrono le manovre di base: dritto, svolte, inversione a U, rotatoria e arrivo.</string>
+    <string name="settings_ecarx_arrow_test">Prova ID di svolta 100–130 (sperimentale)</string>
+    <string name="settings_ecarx_arrow_test_description">Ogni pulsante invia solo la propria chiamata della freccia, un passo ogni 2 secondi; premi di nuovo per ricominciare. Gli ID di svolta vanno da 100 a 130, mentre le prove bitmap e SVG percorrono le manovre di base: dritto, svolte, inversione a U, rotatoria e arrivo.</string>
     <string name="settings_ecarx_arrow_test_idle">Nessun test in corso</string>
+    <string name="settings_ecarx_arrow_test_current">ID corrente %1$d</string>
     <string name="settings_ecarx_bitmap_test">Prova frecce bitmap (sperimentale)</string>
     <string name="settings_ecarx_svg_test">Prova frecce SVG (sperimentale)</string>
     <string name="settings_ecarx_arrow_bitmap_step">Bitmap %1$d/%2$d · %3$s</string>

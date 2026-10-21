@@ -1,13 +1,14 @@
 package com.shilapi.xcertplay.hud
 
 /**
- * The two arrow-icon overloads, as exercised by the Settings diagnostics.
+ * The three arrow channels, as exercised by the Settings diagnostics.
  *
- * The numeric `updateTurnByTurnArrow(int)` channel was never usable on this head unit, so it is
- * not exposed here. [BITMAP] and [SVG] carry an icon instead of a code, so they are swept over the
- * basic maneuvers in [EcarxArrowShape].
+ * [TURN_ID] is the numeric `updateTurnByTurnArrow(int)` channel, swept over 100..130 on the car to
+ * look for icons in that range. [BITMAP] and [SVG] carry an icon instead of a code, so they are
+ * swept over the basic maneuvers in [EcarxArrowShape].
  */
 enum class EcarxArrowTestKind {
+    TURN_ID,
     BITMAP,
     SVG,
 }
@@ -37,6 +38,8 @@ data class EcarxArrowTestStep(
     val kind: EcarxArrowTestKind,
     val index: Int,
     val total: Int,
-    /** The maneuver whose icon was pushed. */
-    val shape: EcarxArrowShape,
+    /** The numeric turn ID for [EcarxArrowTestKind.TURN_ID], otherwise -1. */
+    val turnId: Int = -1,
+    /** The maneuver for [EcarxArrowTestKind.BITMAP] and [EcarxArrowTestKind.SVG], otherwise null. */
+    val shape: EcarxArrowShape? = null,
 )

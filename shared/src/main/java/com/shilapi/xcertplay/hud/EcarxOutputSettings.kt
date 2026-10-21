@@ -108,9 +108,10 @@ object EcarxOutputSettings {
     // ---------------------------------------------------------------- arrow-channel tests (diagnostic)
 
     /**
-     * Runs one arrow channel for calibration: the basic maneuvers through the bitmap or SVG
-     * overload, one step every 2 seconds. Applies at once, leaves the saved settings alone, and
-     * normal guidance resumes when the test ends. [onStep] runs on a worker thread.
+     * Runs one arrow channel for calibration: turn IDs 100..130, or the basic maneuvers through
+     * the bitmap or SVG overload, one step every 2 seconds. Applies at once, leaves the saved
+     * settings alone, and normal guidance resumes when the test ends. [onStep] runs on a worker
+     * thread.
      */
     fun startArrowTest(
         context: Context,
@@ -129,7 +130,7 @@ object EcarxOutputSettings {
     // ---------------------------------------------------------------- lane probe (diagnostic)
 
     /**
-     * Dumps the `ILaneInfo` contract and runs one spy push through `updateLaneInfo`.
+     * Dumps the `ILaneInfo` contract and runs spy passes through both lane entry points.
      * [onResult] runs on a worker thread.
      */
     fun probeLaneInfo(context: Context, onResult: (String) -> Unit) {

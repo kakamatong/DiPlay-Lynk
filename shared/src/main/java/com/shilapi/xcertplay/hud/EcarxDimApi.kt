@@ -33,8 +33,8 @@ import java.lang.reflect.Proxy
  * DimInteraction.getShowPresentationOption()                            -> int   (the only read-back we found)
  * DimInteraction.setPresentationToDimSwitch(int,String,String,boolean)  <- 仪表投屏开关, returns void
  * INaviInteraction.updateNavigationInfo(INavigationInfo)
- * INaviInteraction.updateTurnByTurnArrow(String) | (Bitmap)          -- 本移植使用的两个图标重载
- *   (the device also declares updateTurnByTurnArrow(int); it is a demo ramp and is not used)
+ * INaviInteraction.updateTurnByTurnArrow(int) | (String) | (Bitmap)
+ *   (the live path uses String; int and Bitmap are calibration-only)
  * INaviInteraction.updateDistanceToNextGuidancePoint(int)
  * INaviInteraction.updateDistanceToDestination(int)
  * INaviInteraction.updateETA(int)
@@ -87,6 +87,8 @@ internal object EcarxDimApi {
         val dayNightMode: Int = 0,
         val nextGuidancePointName: String = "",
         val navigationTurnSvg: String = "",
+        /** Diagnostic-only lane payload for the ILaneInfo probe; live guidance leaves it null. */
+        val laneInfo: Any? = null,
     )
 
     // ---------------------------------------------------------------- DimInteraction
@@ -137,6 +139,14 @@ internal object EcarxDimApi {
         }.getOrElse { return EcarxResult.failed("INavigationInfo proxy failed: ${describe(it)}") }
         return call(navi, "updateNavigationInfo", arrayOf(itf), arrayOf<Any?>(info), "updateNavigationInfo")
     }
+
+    /**
+     * The numeric `updateTurnByTurnArrow(int)` overload. The live guidance push does not use it
+     * (the code table is a demo ramp on this firmware); it exists for the Settings calibration
+     * sweep only.
+     */
+    fun updateTurnByTurnArrow(navi: Any, arrow: Int): EcarxResult =
+        callInt(navi, "updateTurnByTurnArrow", arrow)
 
     /**
      * Pushes a drawn arrow bitmap through the `(Bitmap)` overload. This is the code-table-free path:
@@ -316,7 +326,7 @@ internal object EcarxDimApi {
             "getMuteState" -> g.muteState
             "getDayNightMode" -> g.dayNightMode
             "getNextGuidancePointName" -> g.nextGuidancePointName
-            "getLaneInfo" -> null
+            "getLaneInfo" -> g.laneInfo
             "getExtensionInfo" -> null
             "getHighwayExitInfo" -> null
             "getRoadCameraInfo" -> null

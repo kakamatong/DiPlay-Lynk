@@ -1030,8 +1030,10 @@
     <string name="settings_ecarx_lane_probe_title">ILaneInfo 調査結果</string>
     <string name="settings_ecarx_lane_probe_hint">ILaneInfo のメソッドを一覧し、プロキシの車線を送って車が実際に読む getter を記録します。停車中にのみ実行してください。DIM ナビゲーションのハンドルが必要です。</string>
     <string name="settings_ecarx_unavailable">車が要求を拒否しました</string>
-    <string name="settings_ecarx_arrow_test_description">各ボタンは対応する転回矢印の呼び出しだけを 2 秒ごとに 1 つ送ります。もう一度押すと最初からやり直します。ビットマップと SVG のテストは直進・転回・Uターン・ラウンドアバウト・到着などの基本図形を順に送ります。</string>
+    <string name="settings_ecarx_arrow_test">転回 ID 100–130 のテスト（実験的機能）</string>
+    <string name="settings_ecarx_arrow_test_description">各ボタンは対応する転回矢印の呼び出しだけを 2 秒ごとに 1 つ送ります。もう一度押すと最初からやり直します。転回 ID は 100〜130、ビットマップと SVG のテストは直進・転回・Uターン・ラウンドアバウト・到着などの基本図形を順に送ります。</string>
     <string name="settings_ecarx_arrow_test_idle">テストは実行されていません</string>
+    <string name="settings_ecarx_arrow_test_current">現在の ID %1$d</string>
     <string name="settings_ecarx_bitmap_test">矢印ビットマップのテスト（実験的機能）</string>
     <string name="settings_ecarx_svg_test">矢印 SVG のテスト（実験的機能）</string>
     <string name="settings_ecarx_arrow_bitmap_step">ビットマップ %1$d/%2$d · %3$s</string>

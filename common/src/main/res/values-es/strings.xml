@@ -928,8 +928,10 @@
     <string name="settings_ecarx_lane_probe_title">Resultado de la sonda ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Enumera los métodos de ILaneInfo y luego envía carriles proxy para registrar los getters que lee el coche. Ejecútalo con el coche parado; la sonda necesita el control de navegación DIM.</string>
     <string name="settings_ecarx_unavailable">El coche rechazó la solicitud</string>
-    <string name="settings_ecarx_arrow_test_description">Cada botón envía solo la llamada de flecha seleccionada, un paso cada 2 segundos; vuelve a pulsar para reiniciar. Las pruebas de mapa de bits y SVG recorren las maniobras básicas: recto, giros, cambio de sentido, rotonda y llegada.</string>
+    <string name="settings_ecarx_arrow_test">Probar ID de giro 100–130 (experimental)</string>
+    <string name="settings_ecarx_arrow_test_description">Cada botón envía solo su llamada de flecha, un paso cada 2 segundos; vuelve a pulsar para reiniciar. Los ID de giro van del 100 al 130, y las pruebas de mapa de bits y SVG recorren las maniobras básicas: recto, giros, cambio de sentido, rotonda y llegada.</string>
     <string name="settings_ecarx_arrow_test_idle">Ninguna prueba en curso</string>
+    <string name="settings_ecarx_arrow_test_current">ID actual %1$d</string>
     <string name="settings_ecarx_bitmap_test">Probar flechas en mapa de bits (experimental)</string>
     <string name="settings_ecarx_svg_test">Probar flechas en SVG (experimental)</string>
     <string name="settings_ecarx_arrow_bitmap_step">Mapa de bits %1$d/%2$d · %3$s</string>

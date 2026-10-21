@@ -977,8 +977,10 @@
     <string name="settings_ecarx_lane_probe_title">نتيجة فحص ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">يعرض طرق ILaneInfo أولًا، ثم يرسل مسارات وكلاء ويسجّل الـ getters التي يقرأها نظام السيارة. شغّله أثناء الوقوف فقط؛ يحتاج الإرسال إلى مقبض ملاحة DIM.</string>
     <string name="settings_ecarx_unavailable">رفضت السيارة الطلب</string>
-    <string name="settings_ecarx_arrow_test_description">يرسل كل زر استدعاء سهم الانعطاف الخاص به فقط، خطوة واحدة كل ثانيتين؛ اضغط مرة أخرى لإعادة البدء. تمرّ اختبارات الصور النقطية وSVG على المناورات الأساسية: مستقيم، انعطاف، دوران للخلف، دوار، الوصول.</string>
+    <string name="settings_ecarx_arrow_test">اختبار معرّفات الانعطاف 100–130 (تجريبي)</string>
+    <string name="settings_ecarx_arrow_test_description">يرسل كل زر استدعاء سهم الانعطاف الخاص به فقط، خطوة واحدة كل ثانيتين؛ اضغط مرة أخرى لإعادة البدء. تمتد معرّفات الانعطاف من 100 إلى 130، بينما تمرّ اختبارات الصور النقطية وSVG على المناورات الأساسية: مستقيم، انعطاف، دوران للخلف، دوار، الوصول.</string>
     <string name="settings_ecarx_arrow_test_idle">لا يوجد اختبار قيد التشغيل</string>
+    <string name="settings_ecarx_arrow_test_current">المعرّف الحالي %1$d</string>
     <string name="settings_ecarx_bitmap_test">اختبار أسهم الانعطاف النقطية (تجريبي)</string>
     <string name="settings_ecarx_svg_test">اختبار أسهم الانعطاف بصيغة SVG (تجريبي)</string>
     <string name="settings_ecarx_arrow_bitmap_step">نقطية %1$d/%2$d · %3$s</string>

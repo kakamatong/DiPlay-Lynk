@@ -40,9 +40,12 @@ internal object EcarxHudBridge {
     private const val TAG = "DiPlay-ECARX-HUD"
 
     /**
-     * The arrow-icon tests offered in Settings. The bitmap and SVG tests walk [EcarxArrowShape],
-     * one step every [ARROW_TEST_STEP_MILLIS].
+     * The arrow tests offered in Settings. [TURN_ID_TEST_FIRST]..[TURN_ID_TEST_LAST] sweeps the
+     * numeric channel; the bitmap and SVG tests walk [EcarxArrowShape], one step every
+     * [ARROW_TEST_STEP_MILLIS].
      */
+    private const val TURN_ID_TEST_FIRST = 100
+    private const val TURN_ID_TEST_LAST = 130
     private const val ARROW_TEST_STEP_MILLIS = 2_000L
 
     /**
@@ -103,7 +106,7 @@ internal object EcarxHudBridge {
     // Arrow-channel test state. While one runs the normal push path stays silent, so the cluster
     // shows only the value under test; the route state keeps updating in the background.
     private var testRunning = false
-    private var testKind = EcarxArrowTestKind.SVG
+    private var testKind = EcarxArrowTestKind.TURN_ID
     private var testIndex = 0
     private var testTotal = 0
     private var testLastStep: EcarxArrowTestStep? = null
@@ -307,7 +310,8 @@ internal object EcarxHudBridge {
     // ---------------------------------------------------------------- arrow-channel tests (diagnostic)
 
     /**
-     * Runs one arrow channel for calibration: [EcarxArrowTestKind.BITMAP] and
+     * Runs one arrow channel for calibration: [EcarxArrowTestKind.TURN_ID] pushes
+     * `updateTurnByTurnArrow(int)` from 100 to 130, [EcarxArrowTestKind.BITMAP] and
      * [EcarxArrowTestKind.SVG] push the basic maneuvers from [EcarxArrowShape] through their own
      * overload. One step every [ARROW_TEST_STEP_MILLIS], and nothing else on the DIM interface
      * meanwhile: the normal guidance push is suspended until the test ends, so the cluster shows
@@ -328,7 +332,10 @@ internal object EcarxHudBridge {
         testRunning = true
         testKind = kind
         testIndex = 0
-        testTotal = EcarxArrowShape.entries.size
+        testTotal = when (kind) {
+            EcarxArrowTestKind.TURN_ID -> TURN_ID_TEST_LAST - TURN_ID_TEST_FIRST + 1
+            EcarxArrowTestKind.BITMAP, EcarxArrowTestKind.SVG -> EcarxArrowShape.entries.size
+        }
         testGeneration += 1
         val generation = testGeneration
         testListener = onStep
@@ -367,9 +374,13 @@ internal object EcarxHudBridge {
                 stopTestLocked()
                 return
             }
-            val current = EcarxArrowTestStep(
-                testKind, index, testTotal, EcarxArrowShape.entries[index],
-            )
+            val current = if (testKind == EcarxArrowTestKind.TURN_ID) {
+                EcarxArrowTestStep(testKind, index, testTotal, turnId = TURN_ID_TEST_FIRST + index)
+            } else {
+                EcarxArrowTestStep(
+                    testKind, index, testTotal, shape = EcarxArrowShape.entries[index],
+                )
+            }
             pushTestStepLocked(naviRef, current)
             testLastStep = current
             step = current
@@ -395,30 +406,45 @@ internal object EcarxHudBridge {
     private fun pushTestStepLocked(naviRef: Any, step: EcarxArrowTestStep): EcarxDimApi.EcarxResult {
         val shape = step.shape
         val result = when (step.kind) {
+            EcarxArrowTestKind.TURN_ID -> EcarxDimApi.updateTurnByTurnArrow(naviRef, step.turnId)
             EcarxArrowTestKind.BITMAP -> {
-                val bitmap = turnArrowBitmap(shape.appleType, shape.drivingSide)
-                if (bitmap == null) {
-                    EcarxDimApi.EcarxResult.failed("no bitmap for ${shape.name}")
+                if (shape == null) {
+                    EcarxDimApi.EcarxResult.failed("no shape for bitmap")
                 } else {
-                    EcarxDimApi.updateTurnByTurnArrow(naviRef, bitmap)
+                    val bitmap = turnArrowBitmap(shape.appleType, shape.drivingSide)
+                    if (bitmap == null) {
+                        EcarxDimApi.EcarxResult.failed("no bitmap for ${shape.name}")
+                    } else {
+                        EcarxDimApi.updateTurnByTurnArrow(naviRef, bitmap)
+                    }
                 }
             }
             EcarxArrowTestKind.SVG -> {
-                val svg = turnArrowSvg(shape.appleType, shape.drivingSide)
-                if (svg.isEmpty()) {
-                    EcarxDimApi.EcarxResult.failed("no svg for ${shape.name}")
+                if (shape == null) {
+                    EcarxDimApi.EcarxResult.failed("no shape for svg")
                 } else {
-                    EcarxDimApi.updateTurnByTurnArrow(naviRef, svg)
+                    val svg = turnArrowSvg(shape.appleType, shape.drivingSide)
+                    if (svg.isEmpty()) {
+                        EcarxDimApi.EcarxResult.failed("no svg for ${shape.name}")
+                    } else {
+                        EcarxDimApi.updateTurnByTurnArrow(naviRef, svg)
+                    }
                 }
             }
         }
         lastArrowChannel = when (step.kind) {
+            EcarxArrowTestKind.TURN_ID -> "test-int"
             EcarxArrowTestKind.BITMAP -> "test-bitmap"
             EcarxArrowTestKind.SVG -> "test-svg"
         }
-        lastArrowCode = "shape:" + shape.name
+        lastArrowCode = if (step.kind == EcarxArrowTestKind.TURN_ID) {
+            step.turnId.toString()
+        } else {
+            shape?.let { "shape:" + it.name } ?: "shape:none"
+        }
+        if (step.kind == EcarxArrowTestKind.TURN_ID) lastArrowCodeValue = step.turnId
         lastArrowPush = if (result.ok) "test-ok" else "test-failed:" + result.reason
-        val label = shape.name
+        val label = if (step.kind == EcarxArrowTestKind.TURN_ID) step.turnId.toString() else shape?.name ?: "none"
         if (result.ok) {
             Log.i(TAG, "arrow test ${step.kind} $label")
         } else {
@@ -566,9 +592,9 @@ internal object EcarxHudBridge {
         maneuver.road.takeIf { it.isNotEmpty() }
             ?.let { EcarxDimApi.updateNextGuidancePointName(naviRef, it) }
         if (EcarxOutputSettings.turnArrowExperimental(app)) {
-            // The arrow goes out through the string overload only. The int channel is gone and the
-            // bitmap channel is a calibration aid, so an unmapped maneuver pushes nothing and the
-            // cluster keeps the arrow that updateNavigationInfo already carried.
+            // The arrow goes out through the string overload only. The int and bitmap channels are
+            // calibration aids, so an unmapped maneuver pushes nothing and the cluster keeps the
+            // arrow that updateNavigationInfo already carried.
             lastArrowType = maneuver.type.toString()
             lastArrowDirection = maneuver.drivingSide.toString()
             val code = amapTurnCode(maneuver.type, maneuver.drivingSide)
@@ -964,9 +990,9 @@ internal object EcarxHudBridge {
     // ---------------------------------------------------------------- lane probe (diagnostic)
 
     /**
-     * Dumps the opaque `ILaneInfo` contract and runs one spy push through `updateLaneInfo`.
-     * Runs on a worker thread; [onResult] is called on that thread, so the caller must post to
-     * its own UI thread.
+     * Dumps the opaque `ILaneInfo` contract and runs spy passes through `updateLaneInfo` and
+     * `updateNavigationInfo`. Runs on a worker thread; [onResult] is called on that thread, so
+     * the caller must post to its own UI thread.
      */
     fun probeLaneInfo(appContext: Context, onResult: (String) -> Unit) {
         Thread({
@@ -983,7 +1009,15 @@ internal object EcarxHudBridge {
                 if (naviRef == null) {
                     "ECARX DIM navigation interface is not ready. Open CarPlay once, then retry."
                 } else {
-                    EcarxLaneProbe.probe(naviRef)
+                    val wasActive = synchronized(lock) { lastPushed != null }
+                    val probeReport = EcarxLaneProbe.probe(naviRef)
+                    // The aggregate pass pushes a fake LANE PROBE card. Clear it only when no live
+                    // route owned the cluster; an active navigation must not be stopped here.
+                    if (!wasActive && synchronized(lock) { lastPushed == null }) {
+                        EcarxDimApi.notifyTurnByTurnStopped(naviRef)
+                        EcarxDimApi.updateLaneInfoEmpty(naviRef)
+                    }
+                    probeReport
                 }
             }.getOrElse { error ->
                 "lane probe failed: " + error.javaClass.simpleName + ": " + error.message
@@ -1026,7 +1060,11 @@ internal object EcarxHudBridge {
             append(" lastArrowSvgHead=").append(lastArrowSvgHead)
             append(" arrowTest=").append(testKind).append(" step=").append(testIndex)
                 .append('/').append(testTotal).append(" running=").append(testRunning)
-                .append(" lastTest=").append(testLastStep?.shape?.name ?: "none")
+                .append(" lastTest=").append(
+                    testLastStep?.let { step ->
+                        if (step.kind == EcarxArrowTestKind.TURN_ID) step.turnId.toString() else step.shape?.name
+                    } ?: "none",
+                )
             append(" arrowOverloads=").append(arrowOverloads())
             append(" arrowTimeline=").append(arrowTimeline.joinToString("|"))
             append(" maneuverTimeline=").append(maneuverTimeline.joinToString("|"))
