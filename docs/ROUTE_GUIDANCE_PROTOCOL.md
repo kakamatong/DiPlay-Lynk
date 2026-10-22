@@ -46,14 +46,14 @@ payload 是一串 TLV，连续排列：
 
 ## 4. 0x5201 RouteGuidanceUpdate
 
-路线状态的汇总帧，不含具体转向图标。
+路线状态的汇总帧，不含具体转向图标，也不含逐车道推荐状态。TLV 是**可选增量**：某一帧可以只带部分字段，接收方要和缓存 merge。
 
 | TLV | 名称 | 类型 | 含义 |
 | --- | --- | --- | --- |
-| 0x0000 | component ID | u16 | 组件 ID |
+| 0x0000 | component ID | u16 数组 | 组件 ID，可重复，最多 8 个 |
 | 0x0001 | route guidance state | u8 | 路线状态，见下表 |
-| 0x0002 | maneuver state | u8 | 机动更新状态；具体取值语义未恢复 |
-| 0x0003 | current road name | UTF-8 | 当前道路名 |
+| 0x0002 | maneuver state | u8 | 机动更新状态；项目里只存不解释 |
+| 0x0003 | current road name | UTF-8 | 当前道路名，NUL 结尾 |
 | 0x0004 | destination name | UTF-8 | 目的地名称 |
 | 0x0005 | ETA | u64 | 预计到达时间，Unix 秒 |
 | 0x0006 | time remaining | u64 | 剩余时间，秒 |
@@ -63,14 +63,25 @@ payload 是一串 TLV，连续排列：
 | 0x000A | distance to maneuver | u32 | 到下一机动的距离，单位见 0x000C |
 | 0x000B | distance to maneuver string | UTF-8 | 格式化好的“到下一机动距离”文本 |
 | 0x000C | distance to maneuver units | u8 | 同 0x0009 |
-| 0x000D | maneuver list | u16 数组 | 机动索引列表；第一个是当前机动 |
+| 0x000D | maneuver list | u16 数组 | 机动索引列表；第一个是当前机动，最多 16 个 |
 | 0x000E | maneuver count | u16 | 列表中的机动数量 |
-| 0x000F | visible in app | u8 | 是否在手机端可见；语义未完全确认 |
-| 0x0010 | lane guidance index | u16 | 当前车道指引索引，对应 0x5204 的 0x0001 |
-| 0x0011 | lane guidance total | u16 | 车道指引总数 |
-| 0x0012 | lane guidance showing | u8 | 当前显示的车道状态 |
-| 0x0013 | source name | UTF-8 | 导航来源名（高德/Apple Maps 等） |
-| 0x0014 | source supports RG | u8 | 该来源是否支持路线指引 |
+| 0x000F | visible in app | u8 | 是否在手机端可见；0/1，项目里只存 |
+| 0x0010 | lane guidance index | u16 | 当前车道指引事件索引，对应 0x5204 的 0x0001 |
+| 0x0011 | lane guidance total | u16 | 车道指引事件总数，**不是车道条数** |
+| 0x0012 | lane guidance showing | u8 | 车道指引显示状态；**不是推荐车道索引** |
+| 0x0013 | source name | UTF-8 | 导航来源名（高德 / Apple Maps 等） |
+| 0x0014 | source supports RG | u8 | 该来源是否支持路线指引；0 会触发 hard clear |
+| 0x0015 | destinationTimeZoneOffsetMinutes | — | iOS 17+，项目未消费 |
+| 0x0016 | stopType | — | iOS 17+，项目未消费 |
+| 0x0017 | electricVehicleDestination | — | iOS 17+，项目未消费 |
+| 0x0018–0x001A | reserved | — | iOS 未来扩展，跳过 |
+
+**重要：0x5201 不携带“推荐哪条车道”。** 推荐车道在 0x5204 的 `0x0002` LaneInformations 里：
+
+- 每条车道 `0x0001 status`：`0=NOT_GOOD`、`1=GOOD`、`2=PREFERRED`
+- `0x0003 angleHighlight`：高亮角度
+
+`0x0010` 只是把当前 0x5204 事件和 0x5201 关联起来；`0x0012` 是显示状态，不是推荐车道索引。0x5204 事件可能**先于**激活它的 0x5201 到达，所以接收方要按 index 缓存，等 0x5201 再激活。
 
 路线状态（0x0001）：
 
@@ -83,6 +94,8 @@ payload 是一串 TLV，连续排列：
 | 4 | Locating | 定位中 |
 | 5 | Rerouting | 重新规划路线 |
 | 6 | ProceedToRoute | 前往路线起点 |
+
+参考：luka-dev/mib2q-carplay-rgi 的 [rgd_tlv.h](https://github.com/luka-dev/mib2q-carplay-rgi/blob/main/hook/routeguidance/rgd_tlv.h)、[rgd_tlv.c](https://github.com/luka-dev/mib2q-carplay-rgi/blob/main/hook/routeguidance/rgd_tlv.c)、[rgd_hook.c](https://github.com/luka-dev/mib2q-carplay-rgi/blob/main/hook/routeguidance/rgd_hook.c)。该项目的 bus 写掩码里有 lane index/showing，但没有 lane total；如果直接拿它的 bus 数据，total 可能看不到。
 
 注意：空机动列表（0x000D 有列表但没有首项）表示“当前没有下一条机动”，不等于导航结束。只有 0 或 2 才是结束信号。
 

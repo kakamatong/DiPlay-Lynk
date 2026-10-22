@@ -143,6 +143,9 @@ internal object EcarxHudBridge {
     private var lastGuidanceTurnId = "none"
     private var lastGuidanceDrivingDirection = "none"
     private var laneMethodNames: String? = null
+    /** The 1 s lane-read probe: idle/empty/data/no-getter, and the last compact readout. */
+    private var lanePollState = "idle"
+    private var lastLanePoll = "none"
 
     /** The `ILaneInfo` method signatures, for the diagnostic report. */
     private fun laneMethods(): String {
@@ -544,7 +547,49 @@ internal object EcarxHudBridge {
         watchProjectionLocked()
         if (testRunning) return@synchronized
         // Guidance can expire without a frame (a list that stays empty), so check every second.
-        if (lastPushed != null && route.current() == null) endLocked()
+        if (lastPushed != null && route.current() == null) {
+            endLocked()
+        } else if (lastPushed != null) {
+            pollLaneInfoLocked()
+        }
+    }
+
+    /**
+     * Once guidance is live, read the car's lane info once a second and log every non-empty result.
+     *
+     * The DIM interface we know is write-only, so this first tries the read paths the navi object
+     * may expose (`getLaneInfo`, or `getNavigationInfo().getLaneInfo`). If none exists, the method
+     * list is logged once and the poll stops; the caller then knows this firmware does not publish
+     * lane data through this object.
+     */
+    private fun pollLaneInfoLocked() {
+        if (lanePollState == "no-getter") return
+        val naviRef = navi ?: return
+        val read = EcarxLaneProbe.readLaneInfo(naviRef)
+        val maneuver = "turn=" + lastGuidanceTurnId + " type=" + lastArrowType + " dir=" + lastArrowDirection +
+            " laneIdx=" + route.laneSnapshot().eventIndex
+        when {
+            read.source == null -> {
+                lanePollState = "no-getter"
+                lastLanePoll = ("no lane getter; no-arg methods=" + EcarxLaneProbe.naviMethodNames(naviRef)).take(600)
+                Log.w(TAG, "lane poll: $lastLanePoll")
+            }
+            read.text == null -> {
+                if (lanePollState != "empty") {
+                    lanePollState = "empty"
+                    lastLanePoll = "$maneuver " + read.source + "=empty"
+                    Log.i(TAG, "lane poll: $lastLanePoll")
+                }
+            }
+            else -> {
+                lanePollState = "data"
+                val text = ("$maneuver " + read.source + " " + read.text).take(600)
+                if (text != lastLanePoll) {
+                    lastLanePoll = text
+                    Log.i(TAG, "lane poll: $text")
+                }
+            }
+        }
     }
 
     /**
@@ -641,7 +686,10 @@ internal object EcarxHudBridge {
         val naviRef = navi
         if (naviRef != null) {
             EcarxDimApi.notifyTurnByTurnStopped(naviRef)
-            EcarxDimApi.updateDistanceToNextGuidancePoint(naviRef, 0)
+            // 0 is the "no arrow" value; without it the cluster keeps the last turn icon.
+            EcarxDimApi.updateTurnByTurnArrow(naviRef, 0)
+            // -1 is the "no distance" value; 0 leaves a "0 m" label behind.
+            EcarxDimApi.updateDistanceToNextGuidancePoint(naviRef, -1L)
             EcarxDimApi.updateNextGuidancePointName(naviRef, "")
             EcarxDimApi.updateLaneInfoEmpty(naviRef)
         }
@@ -1083,8 +1131,9 @@ internal object EcarxHudBridge {
             append(" arrowOverloads=").append(arrowOverloads())
             append(" arrowTimeline=").append(arrowTimeline.joinToString("|"))
             append(" maneuverTimeline=").append(maneuverTimeline.joinToString("|"))
-            append(" guidanceTurnId=").append(lastGuidanceTurnId)
-            append(" guidanceDrivingDirection=").append(lastGuidanceDrivingDirection)
+            append(" lastGuidanceTurnId=").append(lastGuidanceTurnId)
+            append(" lastGuidanceDrivingDirection=").append(lastGuidanceDrivingDirection)
+            append(" lanePoll=").append(lastLanePoll)
             val lane = route.laneSnapshot()
             val laneText = lane.lanes.joinToString(";") { item ->
                 "pos=" + item.position + ",status=" + item.status + ",dir=" + item.direction +

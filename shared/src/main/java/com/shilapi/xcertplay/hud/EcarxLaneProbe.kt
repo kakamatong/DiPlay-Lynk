@@ -31,11 +31,85 @@ internal object EcarxLaneProbe {
     /** The values one spy lane answers with. */
     private data class LaneValue(val id: Int, val number: Int, val icon: Bitmap?)
 
+    /** One lane-read attempt: source is null when no getter exists, text null when it is empty. */
+    internal data class LaneRead(val source: String?, val text: String?)
+
+    /**
+     * Tries the read paths a DIM navigation object may expose: `getLaneInfo()` on the navi object,
+     * or `getNavigationInfo().getLaneInfo()`. A missing getter returns `source == null`; an existing
+     * getter with no lanes returns `text == null`.
+     */
+    fun readLaneInfo(navi: Any): LaneRead {
+        val direct = findNoArg(navi, "getLaneInfo")
+        if (direct != null) {
+            val value = runCatching { direct.invoke(navi) }.getOrNull()
+            return LaneRead("getLaneInfo", formatLaneInfo(value))
+        }
+        val navigationInfo = findNoArg(navi, "getNavigationInfo")
+            ?: findNoArg(navi, "getCurrentNavigationInfo")
+            ?: return LaneRead(null, null)
+        val info = runCatching { navigationInfo.invoke(navi) }.getOrNull()
+            ?: return LaneRead(navigationInfo.name, null)
+        val lane = findNoArg(info, "getLaneInfo")
+            ?: return LaneRead(navigationInfo.name, null)
+        val value = runCatching { lane.invoke(info) }.getOrNull()
+        return LaneRead(navigationInfo.name + ".getLaneInfo", formatLaneInfo(value))
+    }
+
+    /** No-arg methods plus anything named Lane/Navigation, so a missing read path is diagnosable. */
+    fun naviMethodNames(navi: Any): String = runCatching {
+        navi.javaClass.methods
+            .filter {
+                it.parameterCount == 0 ||
+                    it.name.contains("Lane", ignoreCase = true) ||
+                    it.name.contains("Navigation", ignoreCase = true)
+            }
+            .sortedBy { it.name }
+            .joinToString(",") { method ->
+                method.name + "(" + method.parameterTypes.joinToString(",") { it.simpleName } +
+                    "): " + method.returnType.simpleName
+            }
+    }.getOrDefault("missing")
+
+    private fun findNoArg(target: Any, name: String): Method? =
+        runCatching { target.javaClass.getMethod(name) }
+            .recoverCatching { target.javaClass.getDeclaredMethod(name).also { it.isAccessible = true } }
+            .getOrNull()
+
+    private fun formatLaneInfo(value: Any?): String? {
+        if (value == null) return null
+        val items = when {
+            value.javaClass.isArray -> (0 until ReflectArray.getLength(value))
+                .mapNotNull { ReflectArray.get(value, it) }
+            value is Iterable<*> -> value.filterNotNull()
+            else -> listOf(value)
+        }
+        if (items.isEmpty()) return null
+        return items.take(8).mapIndexed { index, lane ->
+            "[$index] number=" + readInt(lane, "getLaneNumber") +
+                " id=" + readInt(lane, "getLaneBackIconId") +
+                " icon=" + readIcon(lane, "getLaneBackIcon")
+        }.joinToString("; ")
+    }
+
+    private fun readInt(target: Any, name: String): String {
+        val method = findNoArg(target, name) ?: return "?"
+        return runCatching { method.invoke(target)?.toString() ?: "null" }.getOrDefault("err")
+    }
+
+    private fun readIcon(target: Any, name: String): String {
+        val method = findNoArg(target, name) ?: return "?"
+        val value = runCatching { method.invoke(target) }.getOrNull() ?: return "null"
+        return if (value is Bitmap) "Bitmap(" + value.width + "x" + value.height + ")" else value.toString()
+    }
+
     fun probe(navi: Any): String {
         val lane = runCatching { Class.forName(EcarxCapabilities.LANE_INFO) }.getOrNull()
             ?: return "ILaneInfo class not found on this head unit: ${EcarxCapabilities.LANE_INFO}"
         val report = buildString {
             appendLine("navi: " + navi.javaClass.name)
+            appendLine("navi methods (no-arg):")
+            appendLine("  " + naviMethodNames(navi))
             appendLine("class: " + lane.name)
             appendLine("interface: " + lane.isInterface)
             appendLine("modifiers: " + Modifier.toString(lane.modifiers))

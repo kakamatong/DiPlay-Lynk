@@ -99,7 +99,48 @@ INaviInteraction.updateLaneInfo(ILaneInfo[])
 6. 仪表“有反应但没箭头”的原因：高德没有 0x5204、ID 表不对、还是车道 API 只画背景不画箭头？
 7. 车道图标表是否和 turn ID 表（101–143）共用；131–139 是否是环岛出口 11–19。
 
+## 6.5 真实道路观察：逐车道箭头从哪来
+
+2026-10-21 实车反馈：**路口每个车道的箭头指引是有的，但没有“推荐车道”高亮**；而且 **HUD 也显示同样的车道箭头**。HUD 不可能是中控高德 UI 的镜像，所以可以排除“投屏/高德原生 UI”，基本确定是车机自己的独立车道数据（原车导航/仪表地图）在喂 HUD 和仪表。DiPlay 正式路径从未发送非空车道数据——所以这些基础箭头不是 `updateLaneInfo` 画的。
+
+可能来源（按当前证据排序）：
+
+1. **原车自带导航 / 仪表地图**（最可能）：车机导航在后台运行或仪表地图本身知道当前道路的车道，直接把车道箭头送到仪表和 HUD。
+2. **仪表按 turn ID / 机动类型自己画**：仪表根据 `updateTurnByTurnArrow(int)` 的机动图标生成一套通用车道箭头。
+3. **仪表投屏镜像**：HUD 也显示后基本排除；仅作为对照保留。
+4. **0x5204**：只有 `laneFrames > 0` 才成立；高德通常不发，但需要看诊断报告确认。
+
+如果基础箭头来自 1/2，那么 `ILaneInfo` 很可能只负责**推荐车道的高亮/背景层**，不是整条车道箭头。102/103/109 是转向图标，不是“推荐”图标，所以不会出现高亮——这与“有箭头、没推荐”完全吻合。
+
+快速判定：
+
+| 实验 | 若箭头消失/变化 | 说明 |
+| --- | --- | --- |
+| 退出原车导航的路线 | 箭头消失 | 来源是原车导航路线 |
+| 关闭原车导航/仪表地图（若可关） | 箭头消失 | 来源是原车导航/地图 |
+| 关闭“仪表盘同步投屏” | 箭头不变 | 排除投屏镜像 |
+| 诊断报告 `laneFrames` | 0 或 >0 | 0 则排除 0x5204 |
+| 同一路口用 Apple Maps | 出现推荐高亮 | 0x5204 是缺失的推荐层 |
+| 用 100–200 turn ID 测试 | 车道箭头跟着变 | 来源是仪表按 turn ID 绘制 |
+| 点 `updateLaneInfo` 探针 | 只有背景/高亮变化 | `ILaneInfo` 是推荐/背景层 |
+
+## 6.6 读取探针（2026-10-22）
+
+导航开始后（`lastPushed != null`），`EcarxHudBridge` 每秒调用一次 `EcarxLaneProbe.readLaneInfo(navi)`：
+
+1. 先找 `navi.getLaneInfo()`；
+2. 没有再找 `navi.getNavigationInfo().getLaneInfo()` / `getCurrentNavigationInfo().getLaneInfo()`；
+3. 返回 `ILaneInfo[]` 时，按 `[i] number=... id=... icon=...` 打印所有非空字段；
+4. 如果 getter 存在但为空，只记一次 `=empty`；
+5. 如果 getter 不存在，打印 `navi` 的所有无参方法名并停止轮询。
+
+日志 tag 是 `DiPlay-ECARX-Lane`；诊断报告里新增 `lanePoll=`。
+
+注意：`INavigationInfo.getLaneInfo()` 是平台调用**我们**的 getter，不是平台提供的读取接口；这里是在赌 `navi` 对象自身有同名读取方法。若日志显示 `no lane getter`，说明 DIM 这条路读不到原车导航的车道数据，需要另找原车导航的 service/broadcast。
+
 ## 7. 当前假设（按可能性排序）
+
+**E. 箭头早已由别的层画出（2026-10-21 新观察）。** 真实路口已有逐车道箭头，但 DiPlay 正式路径没发非空车道数据；基础箭头可能来自投屏镜像、车机原生导航或仪表按 turn ID 自绘。`ILaneInfo` 只负责推荐车道的高亮/背景层。这条目前最符合现场现象。
 
 **A. ID-only 方案。** 客户端把 `ILaneInfo[]` 当成“每条车道一个背景图标 ID”，数组下标就是车道位置；Bitmap 和 laneNumber 在这个固件里是死字段。实现时只需要给每条车道一个正确的 icon ID。
 
@@ -120,7 +161,7 @@ INaviInteraction.updateLaneInfo(ILaneInfo[])
 ## 9. 代码位置
 
 - `EcarxDimApi.kt`：`updateLaneInfo()`、`updateLaneInfoEmpty()`、`getLaneInfo`
-- `EcarxLaneProbe.kt`：4 轮 spy
-- `EcarxHudBridge.kt`：`endLocked()` 的空数组清理、`probeLaneInfo()`
+- `EcarxLaneProbe.kt`：4 轮 spy + `readLaneInfo()` 读取探针
+- `EcarxHudBridge.kt`：`endLocked()` 的空数组清理、`probeLaneInfo()`、每秒 `pollLaneInfoLocked()`
 - `RouteGuidanceState.kt`：`0x5204` / `0x5201` 车道解析
 - `docs/ROUTE_GUIDANCE_PROTOCOL.md`：0x5204 / 0x5201 协议

@@ -141,7 +141,8 @@ internal object EcarxDimApi {
 
     /**
      * The numeric `updateTurnByTurnArrow(int)` overload, the live arrow channel. The ID is the
-     * ECARX turn-icon table entry recovered on the car (101 start, 102 left, 103 right, ...).
+     * ECARX turn-icon table entry recovered on the car (101 start, 102 left, 103 right, ...);
+     * 0 clears the icon.
      */
     fun updateTurnByTurnArrow(navi: Any, arrow: Int): EcarxResult =
         callInt(navi, "updateTurnByTurnArrow", arrow)
@@ -163,6 +164,7 @@ internal object EcarxDimApi {
         call(navi, "updateTurnByTurnArrow", arrayOf(String::class.java), arrayOf<Any?>(svg),
             "updateTurnByTurnArrow(String)")
 
+    /** Distance to the next maneuver; `-1` means "no distance" (used on teardown). */
     fun updateDistanceToNextGuidancePoint(navi: Any, meters: Long): EcarxResult =
         callInt(navi, "updateDistanceToNextGuidancePoint", meters.toInt())
 
