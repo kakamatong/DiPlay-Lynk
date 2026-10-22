@@ -1,3 +1,9 @@
+# DiPlay 0.3.25 — 2026-10-22
+
+- ECARX lane API docs updated with the lane-read path and probe state.
+- HUD bridge reads lane info through ILaneInfo and exposes probe status for diagnostics.
+- Arrow channel unchanged: live arrows still use `updateTurnByTurnArrow(int)` turn IDs.
+
 # DiPlay 0.3.24 — 2026-10-21
 
 - Live HUD arrows now use the numeric `updateTurnByTurnArrow(int)` turn-ID channel (101 start, 102 left, 103 right, ...); the SVG string is calibration-only and `getNavigationTurnSVG` returns empty.
