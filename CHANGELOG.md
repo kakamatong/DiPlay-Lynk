@@ -1,3 +1,8 @@
+# DiPlay 0.3.27 — 2026-10-23
+
+- Add navigation-package support so the ECARX bridge can bind to the car's factory navigation service.
+- Expand navigation diagnostics to report the detected navigation package and service state.
+
 # DiPlay 0.3.26 — 2026-10-23
 
 - Read the ECARX 0x5201 maneuver list and expose it in the navigation-state diagnostics.
