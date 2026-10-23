@@ -48,8 +48,10 @@ class SettingsLayoutPolicyTest {
 
     @Test fun everySettingsSectionHasExactlyOneDestination() {
         assertEquals(SettingsCategory.entries.toSet(), SettingsInformationArchitecture.sectionsByCategory.keys)
+        // The Lynk port keeps the BYD-only cards out of the settings architecture on purpose.
+        val hiddenOnThisPort = setOf(SettingsSection.AMBIENT_LIGHTING, SettingsSection.BYD_NAVIGATION)
         val assignments = SettingsInformationArchitecture.sectionsByCategory.values.flatten()
-        assertEquals(SettingsSection.entries.toSet(), assignments.toSet())
+        assertEquals(SettingsSection.entries.toSet() - hiddenOnThisPort, assignments.toSet())
         assertEquals(assignments.toSet().size, assignments.size)
     }
 }

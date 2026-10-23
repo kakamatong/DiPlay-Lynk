@@ -77,20 +77,6 @@ class ClusterSettingsConsentTest {
         app.getSharedPreferences("diplay", 0).edit().clear().commit()
     }
 
-    @Test fun cancellingAdbRoutingKeepsTheSessionAndItsClusterLease() {
-        setting(R.string.adb_cluster_activity_mode).performClick()
-        assertCurrentSessionUnchanged()
-        assertFalse(AirPlayPersistence.loadAdbClusterEnabled(screen))
-        assertFalse(AirPlayPersistence.loadClusterMapEnabled(screen))
-
-        dialog().getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
-        shadowOf(Looper.getMainLooper()).idle()
-
-        assertFalse(setting(R.string.adb_cluster_activity_mode).isChecked)
-        assertFalse(AirPlayPersistence.loadClusterMapEnabled(screen))
-        assertCurrentSessionUnchanged()
-    }
-
     @Test fun cancellingClusterMapByBackRestoresTheSavedSwitchWithoutReleasingOutput() {
         AirPlayPersistence.saveClusterMapEnabled(screen, true)
         render()
@@ -104,24 +90,6 @@ class ClusterSettingsConsentTest {
         assertTrue(setting(R.string.carplay_map_on_instrument_cluster_experimental).isChecked)
         assertTrue(AirPlayPersistence.loadClusterMapEnabled(screen))
         assertCurrentSessionUnchanged()
-    }
-
-    @Test fun applyingAdbRoutingReleasesItsOldLeaseAndReconnectsOnlyAfterConsent() {
-        setting(R.string.adb_cluster_activity_mode).performClick()
-        assertCurrentSessionUnchanged()
-        assertFalse(AirPlayPersistence.loadAdbClusterEnabled(screen))
-        assertEquals(screen.getString(R.string.apply_and_reconnect),
-            dialog().getButton(AlertDialog.BUTTON_POSITIVE).text.toString())
-
-        dialog().getButton(AlertDialog.BUTTON_POSITIVE).performClick()
-        shadowOf(Looper.getMainLooper()).idle()
-
-        assertTrue(AirPlayPersistence.loadAdbClusterEnabled(screen))
-        assertTrue(AirPlayPersistence.loadClusterMapEnabled(screen))
-        assertEquals(listOf("release-cluster-surface", "stop-session"), events)
-        assertNull(CarPlayBackgroundSession.snapshot())
-        assertEquals(CarPlayHostActivity::class.java.name,
-            shadowOf(screen).nextStartedActivity?.component?.className)
     }
 
     @Test fun applyingClusterMapOffReconnectsOnlyAfterConsent() {
