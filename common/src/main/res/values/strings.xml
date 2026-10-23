@@ -1029,6 +1029,9 @@
     <string name="settings_ecarx_turn_arrow">Send arrow icons (experimental)</string>
     <string name="settings_ecarx_turn_arrow_description">Sends each maneuver\'s arrow as an ECARX turn-ID icon. On by default; turn it off to let the cluster keep its own arrow.</string>
     <string name="settings_ecarx_lane_probe">Probe ILaneInfo (experimental)</string>
+    <string name="settings_ecarx_nav_packages">Navigation packages (experimental)</string>
+    <string name="settings_ecarx_nav_packages_hint">Tap a package to open its system app settings; disable or force-stop it there.</string>
+    <string name="settings_ecarx_nav_packages_empty">No matching navigation packages.</string>
     <string name="settings_ecarx_lane_probe_title">ILaneInfo probe</string>
     <string name="settings_ecarx_lane_probe_hint">Lists the ILaneInfo methods, then pushes spy lanes and records the getters the car reads. Run it while parked; the spy needs the DIM navigation handle.</string>
     <string name="settings_ecarx_unavailable">The car rejected the request</string>

@@ -986,6 +986,9 @@
     <string name="settings_ecarx_turn_arrow">发送转向箭头（实验性）</string>
     <string name="settings_ecarx_turn_arrow_description">把每个机动动作的转向箭头以 ECARX turn ID 图标发送到仪表。默认开启；关闭后仪表保留自己的箭头。</string>
     <string name="settings_ecarx_lane_probe">探测 ILaneInfo（实验性）</string>
+    <string name="settings_ecarx_nav_packages">导航软件包（实验性）</string>
+    <string name="settings_ecarx_nav_packages_hint">点一个包打开它的系统应用设置，在那里停用或强行停止。</string>
+    <string name="settings_ecarx_nav_packages_empty">没有匹配的导航软件包。</string>
     <string name="settings_ecarx_lane_probe_title">ILaneInfo 探测结果</string>
     <string name="settings_ecarx_lane_probe_hint">先列出 ILaneInfo 的方法，再推送几条代理车道，记录车机实际读取的 getter。请仅在停车时运行；代理推送需要 DIM 导航句柄。</string>
     <string name="settings_ecarx_unavailable">车机拒绝了这次请求</string>

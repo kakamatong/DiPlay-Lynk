@@ -64,6 +64,7 @@ import com.shilapi.xcertplay.hud.BydVehicleCapabilities
 import com.shilapi.xcertplay.hud.EcarxArrowShape
 import com.shilapi.xcertplay.hud.EcarxArrowTestKind
 import com.shilapi.xcertplay.hud.EcarxArrowTestStep
+import com.shilapi.xcertplay.hud.EcarxNavPackageProbe
 import com.shilapi.xcertplay.telecom.PhoneAudioRoute
 import com.shilapi.xcertplay.hud.BydVehicleField
 import com.shilapi.xcertplay.hud.BydVehicleFieldStore
@@ -2483,6 +2484,11 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                         if (!isFinishing && !isDestroyed) showEcarxLaneProbe(report)
                     }
                 }
+            }, matchButton(8, 56))
+            // The stock navigation/lane service is independent of DiPlay; list the packages that
+            // could own it so the driver can open the system app page and disable it there.
+            card.addView(button(getString(R.string.settings_ecarx_nav_packages), false) {
+                showEcarxNavPackages()
             }, matchButton(8, 56))
             // The arrow-channel tests are calibration aids; this switch keeps them out of release
             // builds when they are not needed.
@@ -5977,6 +5983,44 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             setTextIsSelectable(true)
         })
         appDialogBuilder().setTitle(getString(R.string.settings_ecarx_lane_probe_title))
+            .setView(ScrollView(appDialogContext()).apply { addView(body) })
+            .setPositiveButton(getString(R.string.close), null).show()
+    }
+
+    private fun showEcarxNavPackages() {
+        Thread({
+            val packages: List<EcarxNavPackageProbe.NavPackage> =
+                runCatching { EcarxNavPackageProbe.scan(this@DiPlayActivity) }
+                    .getOrElse { emptyList() }
+            handler.post {
+                if (!isFinishing && !isDestroyed) showEcarxNavPackages(packages)
+            }
+        }, "diplay-nav-packages").apply { isDaemon = true }.start()
+    }
+
+    private fun showEcarxNavPackages(packages: List<EcarxNavPackageProbe.NavPackage>) {
+        val body = column().apply { setPadding(dp(24), dp(12), dp(24), dp(12)) }
+        body.addView(label(getString(R.string.settings_ecarx_nav_packages_hint), 14, MUTED))
+        if (packages.isEmpty()) {
+            body.addView(label(getString(R.string.settings_ecarx_nav_packages_empty), 14, TEXT))
+        } else {
+            body.addView(label(EcarxNavPackageProbe.report(packages), 12, TEXT).apply {
+                typeface = Typeface.MONOSPACE
+                setTextIsSelectable(true)
+            })
+            packages.forEach { pkg ->
+                val name = pkg.label.ifEmpty { pkg.packageName }
+                body.addView(button("$name · ${pkg.packageName}", false) {
+                    openSystem(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.parse("package:${pkg.packageName}"),
+                        ),
+                    )
+                }, matchButton(8, 56))
+            }
+        }
+        appDialogBuilder().setTitle(getString(R.string.settings_ecarx_nav_packages))
             .setView(ScrollView(appDialogContext()).apply { addView(body) })
             .setPositiveButton(getString(R.string.close), null).show()
     }

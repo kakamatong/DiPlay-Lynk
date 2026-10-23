@@ -925,6 +925,9 @@
     <string name="settings_ecarx_turn_arrow">Отправка значков стрелок (экспериментально)</string>
     <string name="settings_ecarx_turn_arrow_description">Отправляет стрелку каждого манёвра как значок turn ID ECARX. Включено по умолчанию; выключите, чтобы щиток показывал свою стрелку.</string>
     <string name="settings_ecarx_lane_probe">Проверка ILaneInfo (экспериментально)</string>
+    <string name="settings_ecarx_nav_packages">Пакеты навигации (экспериментально)</string>
+    <string name="settings_ecarx_nav_packages_hint">Нажмите на пакет, чтобы открыть системные настройки приложения, и отключите или принудительно остановите его.</string>
+    <string name="settings_ecarx_nav_packages_empty">Подходящие пакеты навигации не найдены.</string>
     <string name="settings_ecarx_lane_probe_title">Результат проверки ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Сначала выводит методы ILaneInfo, затем отправляет прокси-полосы и записывает геттеры, которые читает автомобиль. Запускайте только на стоящем автомобиле; для отправки нужен навигационный дескриптор DIM.</string>
     <string name="settings_ecarx_unavailable">Автомобиль отклонил запрос</string>

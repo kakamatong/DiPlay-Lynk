@@ -163,6 +163,19 @@ Proxy 对非 void 返回值一律返回类型默认值（false/0/null/""），�
 
 如果 180 秒内一条 `cb.*` 都没有，说明这条回调也不推送导航/车道数据；下一步再试 `updateNavigationAppState(true)`，或者确认原车导航的数据只在车机内部。
 
+## 6.8 原车高德/ECARX 车道服务（2026-10-23）
+
+实车确认：路口车道箭头来自**车机自带的高德/ECARX 导航服务**，即使高德 App 没有启动也会推送；它不是 CarPlay 的 `0x5204`，也不是 DiPlay 的 `updateLaneInfo`，所以 DiPlay 侧读不到、也控制不了。
+
+Settings → Advanced → ECARX 新增 **Navigation packages (experimental)**：
+
+- 扫描已安装包，筛出名字/服务可能和导航、地图、车道相关的候选，并列出它们的 `services`（enabled/exported）；
+- 每个候选包是一个按钮，点开就是系统应用详情页，可在那里停用/强行停止；
+- 扫描只读 PackageManager，不会自动改包状态；系统级服务可能需要在应用页或 ADB 才能停用；
+- 常见候选：`ecarx.naviservice`、`com.autonavi.amapauto`、包含 `amap/gaode/navi/map/lane` 的包。
+
+停用原车导航服务可能连带影响原车地图、HUD 或仪表车道；先记录包名/服务名，必要时用 `pm enable` 或应用页恢复。
+
 ## 7. 当前假设（按可能性排序）
 
 **E. 箭头早已由别的层画出（2026-10-21 新观察）。** 真实路口已有逐车道箭头，但 DiPlay 正式路径没发非空车道数据；基础箭头可能来自投屏镜像、车机原生导航或仪表按 turn ID 自绘。`ILaneInfo` 只负责推荐车道的高亮/背景层。这条目前最符合现场现象。
@@ -182,12 +195,14 @@ Proxy 对非 void 返回值一律返回类型默认值（false/0/null/""），�
 3. **数组语义**：分别发 1/2/3 条车道，调换顺序，改 laneNumber（0-based vs 1-based），看车道位置和数量怎么变。
 4. **聚合路径**：在真实 0x5204 激活时，把 spy 数组放进 `updateNavigationInfo.getLaneInfo()`，确认这条路径是否被消费。
 5. **静态确认**：在 `tools-apktool` 的 smali 里 grep `getLaneBackIcon`、`getLaneBackIconId`、`getLaneNumber`、`updateLaneInfo`，看原厂应用实际填什么。
+6. **原车车道服务**：在 ECARX 设置里打开 Navigation packages，找到 `ecarx.naviservice` / 高德包，记录具体 service；确认停用后 HUD/仪表车道是否消失。
 
 ## 9. 代码位置
 
 - `EcarxDimApi.kt`：`updateLaneInfo()`、`updateLaneInfoEmpty()`、`getLaneInfo`
 - `EcarxLaneProbe.kt`：4 轮 spy + `readLaneInfo()` 读取探针 + 全量方法 dump
 - `EcarxNavCallbackProbe.kt`：`registerNavigationInteractionCallback` 的 Proxy 探针
+- `EcarxNavPackageProbe.kt`：列出可能提供原车车道的包/服务
 - `EcarxHudBridge.kt`：`endLocked()` 的空数组清理、`probeLaneInfo()`、每秒 `pollLaneInfoLocked()`、`navCallback`
 - `RouteGuidanceState.kt`：`0x5204` / `0x5201` 车道解析
 - `docs/ROUTE_GUIDANCE_PROTOCOL.md`：0x5204 / 0x5201 协议

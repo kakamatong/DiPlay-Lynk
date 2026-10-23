@@ -925,6 +925,9 @@
     <string name="settings_ecarx_turn_arrow">Enviar iconos de flecha (experimental)</string>
     <string name="settings_ecarx_turn_arrow_description">Envía la flecha de cada maniobra como icono turn ID de ECARX. Activado por defecto; desactívalo para que el cuadro use su propia flecha.</string>
     <string name="settings_ecarx_lane_probe">Sondear ILaneInfo (experimental)</string>
+    <string name="settings_ecarx_nav_packages">Paquetes de navegación (experimental)</string>
+    <string name="settings_ecarx_nav_packages_hint">Toca un paquete para abrir los ajustes de la app en el sistema; desactívala o fuerza su detención allí.</string>
+    <string name="settings_ecarx_nav_packages_empty">No hay paquetes de navegación coincidentes.</string>
     <string name="settings_ecarx_lane_probe_title">Resultado de la sonda ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Enumera los métodos de ILaneInfo y luego envía carriles proxy para registrar los getters que lee el coche. Ejecútalo con el coche parado; la sonda necesita el control de navegación DIM.</string>
     <string name="settings_ecarx_unavailable">El coche rechazó la solicitud</string>
