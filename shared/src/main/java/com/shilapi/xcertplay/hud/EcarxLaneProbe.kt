@@ -71,6 +71,13 @@ internal object EcarxLaneProbe {
             }
     }.getOrDefault("missing")
 
+    /** Every method the navi object exposes, including the update methods with parameters. */
+    fun naviAllMethodNames(navi: Any): String = runCatching {
+        navi.javaClass.methods
+            .sortedBy { it.name }
+            .joinToString(",") { signature(it) }
+    }.getOrDefault("missing")
+
     private fun findNoArg(target: Any, name: String): Method? =
         runCatching { target.javaClass.getMethod(name) }
             .recoverCatching { target.javaClass.getDeclaredMethod(name).also { it.isAccessible = true } }
@@ -110,6 +117,8 @@ internal object EcarxLaneProbe {
             appendLine("navi: " + navi.javaClass.name)
             appendLine("navi methods (no-arg):")
             appendLine("  " + naviMethodNames(navi))
+            appendLine("navi methods (all):")
+            appendLine("  " + naviAllMethodNames(navi))
             appendLine("class: " + lane.name)
             appendLine("interface: " + lane.isInterface)
             appendLine("modifiers: " + Modifier.toString(lane.modifiers))

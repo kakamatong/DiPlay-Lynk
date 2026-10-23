@@ -1077,7 +1077,9 @@ internal object EcarxHudBridge {
                     // Leave the last spy lanes on the cluster so they can be inspected. The next
                     // live guidance frame (or session end) overwrites/clears them; an active route
                     // is never stopped here.
-                    EcarxLaneProbe.probe(naviRef)
+                    val laneReport = EcarxLaneProbe.probe(naviRef)
+                    val callbackReport = EcarxNavCallbackProbe.start(naviRef)
+                    laneReport + "\n\nnav callback probe:\n" + callbackReport
                 }
             }.getOrElse { error ->
                 "lane probe failed: " + error.javaClass.simpleName + ": " + error.message
@@ -1134,6 +1136,7 @@ internal object EcarxHudBridge {
             append(" lastGuidanceTurnId=").append(lastGuidanceTurnId)
             append(" lastGuidanceDrivingDirection=").append(lastGuidanceDrivingDirection)
             append(" lanePoll=").append(lastLanePoll)
+            append(" navCallback=").append(EcarxNavCallbackProbe.lastEvents())
             val lane = route.laneSnapshot()
             val laneText = lane.lanes.joinToString(";") { item ->
                 "pos=" + item.position + ",status=" + item.status + ",dir=" + item.direction +

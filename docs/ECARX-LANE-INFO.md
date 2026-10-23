@@ -138,6 +138,31 @@ INaviInteraction.updateLaneInfo(ILaneInfo[])
 
 注意：`INavigationInfo.getLaneInfo()` 是平台调用**我们**的 getter，不是平台提供的读取接口；这里是在赌 `navi` 对象自身有同名读取方法。若日志显示 `no lane getter`，说明 DIM 这条路读不到原车导航的车道数据，需要另找原车导航的 service/broadcast。
 
+## 6.7 0.3.25 日志结论与 callback 探针（2026-10-23）
+
+0.3.25 实车报告：
+
+- `laneFrames=0`、`laneBytes=0`、`laneHex=none`：没有收到 `0x5204`；
+- `laneEvent=0`、`laneShowing=0`、`laneTotal=0`、`laneLanes=`、`laneTlvDump=`：没有逐车道内容；
+- `lanePoll=no lane getter; ...`：1 秒读取探针跑了，但 `navi` 上没有 `getLaneInfo` / `getNavigationInfo`。
+
+同一份方法列表暴露了两个新入口：
+
+- `registerNavigationInteractionCallback(INavigationInteractionCallback)`
+- `updateNavigationAppState(boolean)`
+
+因此 `Probe ILaneInfo` 现在还会：
+
+1. dump `navi` 的**全量方法**；
+2. 找到 `registerNavigationInteractionCallback` 的参数类型，dump 这个 callback 接口的所有方法；
+3. 注册一个 Proxy，180 秒内把每次回调按 `cb.<method>(args)` 打到 `DiPlay-ECARX-Lane`；
+4. 如果参数是 `INavigationInfo` / `ILaneInfo[]`，格式化成 `number/id/icon`；
+5. 诊断报告新增 `navCallback=`，保留最近 12 条回调。
+
+Proxy 对非 void 返回值一律返回类型默认值（false/0/null/""），这是诊断用，不是正式实现。再次点探针会先注销旧 callback 再注册新的。
+
+如果 180 秒内一条 `cb.*` 都没有，说明这条回调也不推送导航/车道数据；下一步再试 `updateNavigationAppState(true)`，或者确认原车导航的数据只在车机内部。
+
 ## 7. 当前假设（按可能性排序）
 
 **E. 箭头早已由别的层画出（2026-10-21 新观察）。** 真实路口已有逐车道箭头，但 DiPlay 正式路径没发非空车道数据；基础箭头可能来自投屏镜像、车机原生导航或仪表按 turn ID 自绘。`ILaneInfo` 只负责推荐车道的高亮/背景层。这条目前最符合现场现象。
@@ -161,7 +186,8 @@ INaviInteraction.updateLaneInfo(ILaneInfo[])
 ## 9. 代码位置
 
 - `EcarxDimApi.kt`：`updateLaneInfo()`、`updateLaneInfoEmpty()`、`getLaneInfo`
-- `EcarxLaneProbe.kt`：4 轮 spy + `readLaneInfo()` 读取探针
-- `EcarxHudBridge.kt`：`endLocked()` 的空数组清理、`probeLaneInfo()`、每秒 `pollLaneInfoLocked()`
+- `EcarxLaneProbe.kt`：4 轮 spy + `readLaneInfo()` 读取探针 + 全量方法 dump
+- `EcarxNavCallbackProbe.kt`：`registerNavigationInteractionCallback` 的 Proxy 探针
+- `EcarxHudBridge.kt`：`endLocked()` 的空数组清理、`probeLaneInfo()`、每秒 `pollLaneInfoLocked()`、`navCallback`
 - `RouteGuidanceState.kt`：`0x5204` / `0x5201` 车道解析
 - `docs/ROUTE_GUIDANCE_PROTOCOL.md`：0x5204 / 0x5201 协议
