@@ -1,3 +1,9 @@
+# DiPlay 0.3.26 — 2026-10-23
+
+- Read the ECARX 0x5201 maneuver list and expose it in the navigation-state diagnostics.
+- Settings test suite follows the 0.3.25 settings refactor: removed the stale BYD ADB hotspot, call-popup, and DiLink3 advanced-page cases.
+- CI unit tests pass again after the settings refactor.
+
 # DiPlay 0.3.25 — 2026-10-22
 
 - ECARX lane API docs updated with the lane-read path and probe state.
