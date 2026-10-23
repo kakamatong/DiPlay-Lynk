@@ -72,6 +72,8 @@ internal class RouteGuidanceState(
     private val keepAcrossGaps: Boolean = false,
     /** Called for every parsed 0x5202 maneuver, for the diagnostic timeline. */
     private val onManeuver: ((index: Int, type: Int, side: Int, road: String) -> Unit)? = null,
+    /** Called for every 0x5201 maneuver list, with the list and the first (current) index. */
+    private val onManeuverList: ((indices: List<Int>, active: Int) -> Unit)? = null,
 ) {
     private data class Maneuver(val type: Int, val drivingSide: Int, val afterRoad: String)
 
@@ -170,6 +172,7 @@ internal class RouteGuidanceState(
         var state: Int? = null
         var distance: Int? = null
         var firstManeuver: Int? = null
+        val maneuverList = mutableListOf<Int>()
         var listPresent = false
         forEachTlv(data) { type, value, valueLength ->
             when {
@@ -183,7 +186,13 @@ internal class RouteGuidanceState(
                 }
                 type == 0x000D -> {
                     listPresent = true
-                    if (valueLength >= 2) firstManeuver = u16(data, value)
+                    var offset = 0
+                    while (offset + 2 <= valueLength && maneuverList.size < 16) {
+                        val index = u16(data, value + offset)
+                        maneuverList += index
+                        if (firstManeuver == null) firstManeuver = index
+                        offset += 2
+                    }
                 }
                 type == 0x0010 && valueLength >= 2 -> laneGuidanceIndex = u16(data, value)
                 type == 0x0011 && valueLength >= 2 -> laneGuidanceTotal = u16(data, value)
@@ -200,6 +209,7 @@ internal class RouteGuidanceState(
         // maneuver (and the cached 0x5202 details, which are never resent) and hide it only if the list stays
         // empty; the outputs' 1 s tick clears themselves once current() turns null.
         if (listPresent && firstManeuver == null) {
+            onManeuverList?.invoke(emptyList(), activeIndex)
             // An empty current list is not "navigation ended". The ECARX cluster keeps the last
             // arrow until an explicit end or a session teardown clears it.
             if (keepAcrossGaps) return RouteGuidanceChange.NONE
@@ -211,6 +221,7 @@ internal class RouteGuidanceState(
         if (firstManeuver != null) {
             activeIndex = firstManeuver!!
             routeActive = true
+            onManeuverList?.invoke(maneuverList, activeIndex)
         }
         if (distance != null) distanceMeters = distance!!.coerceAtLeast(0)
         return if (current() != null) RouteGuidanceChange.GUIDANCE else RouteGuidanceChange.NONE

@@ -89,6 +89,7 @@ internal object EcarxHudBridge {
     private val route = RouteGuidanceState(
         keepAcrossGaps = true,
         onManeuver = { index, type, side, road -> recordManeuver(index, type, side, road) },
+        onManeuverList = { indices, active -> recordManeuverList(indices, active) },
     )
     private var context: Context? = null
     private var available = false
@@ -138,6 +139,9 @@ internal object EcarxHudBridge {
     private var lastArrowCodeValue = 0
     /** Parsed 0x5202 maneuvers with a human type label, for the diagnostic report. */
     private val maneuverTimeline = ArrayDeque<String>()
+    /** Parsed 0x5201 maneuver lists, only when the active index/list changes. */
+    private val maneuverListTimeline = ArrayDeque<String>()
+    private var lastManeuverListKey = ""
     /** Last handful of arrow pushes, so a straight segment can be told apart from a cleared route. */
     private val arrowTimeline = ArrayDeque<String>()
     private var lastGuidanceTurnId = "none"
@@ -906,7 +910,17 @@ internal object EcarxHudBridge {
         maneuverTimeline.addLast(
             "$stamp idx=$index ${maneuverLabel(type)} t=$type s=$side road=$road",
         )
+        while (maneuverTimeline.size > 80) maneuverTimeline.removeFirst()
+    }
 
+    /** Records a 0x5201 maneuver-list transition; the first index is the current maneuver. */
+    private fun recordManeuverList(indices: List<Int>, active: Int) {
+        val key = "active=$active list=" + indices.joinToString(",")
+        if (key == lastManeuverListKey) return
+        lastManeuverListKey = key
+        val stamp = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.US).format(java.util.Date())
+        maneuverListTimeline.addLast("$stamp $key")
+        while (maneuverListTimeline.size > 80) maneuverListTimeline.removeFirst()
     }
 
     /**
@@ -1133,6 +1147,7 @@ internal object EcarxHudBridge {
             append(" arrowOverloads=").append(arrowOverloads())
             append(" arrowTimeline=").append(arrowTimeline.joinToString("|"))
             append(" maneuverTimeline=").append(maneuverTimeline.joinToString("|"))
+            append(" maneuverListTimeline=").append(maneuverListTimeline.joinToString("|"))
             append(" lastGuidanceTurnId=").append(lastGuidanceTurnId)
             append(" lastGuidanceDrivingDirection=").append(lastGuidanceDrivingDirection)
             append(" lanePoll=").append(lastLanePoll)

@@ -97,6 +97,13 @@ payload 是一串 TLV，连续排列：
 
 参考：luka-dev/mib2q-carplay-rgi 的 [rgd_tlv.h](https://github.com/luka-dev/mib2q-carplay-rgi/blob/main/hook/routeguidance/rgd_tlv.h)、[rgd_tlv.c](https://github.com/luka-dev/mib2q-carplay-rgi/blob/main/hook/routeguidance/rgd_tlv.c)、[rgd_hook.c](https://github.com/luka-dev/mib2q-carplay-rgi/blob/main/hook/routeguidance/rgd_hook.c)。该项目的 bus 写掩码里有 lane index/showing，但没有 lane total；如果直接拿它的 bus 数据，total 可能看不到。
 
+`0x000D` ManeuverList 是 u16 数组，第一个是当前机动。诊断报告里现在有两份时间线：
+
+- `maneuverTimeline`：每一条 `0x5202` 的 `idx/type`，表示手机何时下发了某条机动的类型；
+- `maneuverListTimeline`：`0x5201` 的 `active` 与完整 list 发生变化时记录，表示当前机动何时切换到哪个 index。
+
+如果仪表出现一个路线里没有的转向（例如没有左转却出现 `t=1` 左转），先对这两份时间线：如果 `maneuverListTimeline` 的 `active` 确实变成了该 index，且 list 第一项也是它，那就是手机下发的当前机动；如果 list 第一项不是它，才是我们的 index 选择问题。
+
 注意：空机动列表（0x000D 有列表但没有首项）表示“当前没有下一条机动”，不等于导航结束。只有 0 或 2 才是结束信号。
 
 ## 5. 0x5202 RouteGuidanceManeuverUpdate
