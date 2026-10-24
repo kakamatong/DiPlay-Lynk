@@ -1,3 +1,9 @@
+# DiPlay 0.3.28 — 2026-10-24
+
+- Replace the navigation-package scanner with a single "Disable AMap" entry: it opens the stock AMap (`com.autonavi.amapauto`) system app page so the driver can disable or force-stop it manually.
+- Remove the package scan/probe (`EcarxNavPackageProbe`) and its per-candidate dialog.
+- Show a toast when AMap is not installed on the head unit.
+
 # DiPlay 0.3.27 — 2026-10-23
 
 - Add navigation-package support so the ECARX bridge can bind to the car's factory navigation service.

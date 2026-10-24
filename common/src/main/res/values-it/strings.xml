@@ -1015,9 +1015,9 @@
     <string name="settings_ecarx_turn_arrow">Invia icone delle frecce (sperimentale)</string>
     <string name="settings_ecarx_turn_arrow_description">Invia la freccia di ogni manovra come icona turn ID di ECARX. Attivo per impostazione predefinita; disattivalo per lasciare al quadro la sua freccia.</string>
     <string name="settings_ecarx_lane_probe">Sonda ILaneInfo (sperimentale)</string>
-    <string name="settings_ecarx_nav_packages">Pacchetti di navigazione (sperimentale)</string>
-    <string name="settings_ecarx_nav_packages_hint">Tocca un pacchetto per aprire le impostazioni di sistema dell\'app; disattivala o arrestala forzatamente lì.</string>
-    <string name="settings_ecarx_nav_packages_empty">Nessun pacchetto di navigazione corrispondente.</string>
+    <string name="settings_ecarx_disable_amap">Disattiva AMap (sperimentale)</string>
+    <string name="settings_ecarx_disable_amap_hint">Apre la pagina di sistema dell\'app AMap; disattivala o arrestala forzatamente lì.</string>
+    <string name="settings_ecarx_disable_amap_missing">AMap non è installata su questa unità.</string>
     <string name="settings_ecarx_lane_probe_title">Esito della sonda ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Elenca i metodi di ILaneInfo, poi invia corsie proxy e registra i getter letti dal veicolo. Eseguilo solo a veicolo fermo; la sonda richiede il controllo di navigazione DIM.</string>
     <string name="settings_ecarx_unavailable">L’auto ha rifiutato la richiesta</string>

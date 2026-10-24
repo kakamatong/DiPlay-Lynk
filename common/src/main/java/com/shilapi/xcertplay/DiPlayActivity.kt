@@ -64,7 +64,6 @@ import com.shilapi.xcertplay.hud.BydVehicleCapabilities
 import com.shilapi.xcertplay.hud.EcarxArrowShape
 import com.shilapi.xcertplay.hud.EcarxArrowTestKind
 import com.shilapi.xcertplay.hud.EcarxArrowTestStep
-import com.shilapi.xcertplay.hud.EcarxNavPackageProbe
 import com.shilapi.xcertplay.telecom.PhoneAudioRoute
 import com.shilapi.xcertplay.hud.BydVehicleField
 import com.shilapi.xcertplay.hud.BydVehicleFieldStore
@@ -2485,10 +2484,12 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                     }
                 }
             }, matchButton(8, 56))
-            // The stock navigation/lane service is independent of DiPlay; list the packages that
-            // could own it so the driver can open the system app page and disable it there.
-            card.addView(button(getString(R.string.settings_ecarx_nav_packages), false) {
-                showEcarxNavPackages()
+            // The stock AMap app feeds the cluster lane channel independently of DiPlay. There is
+            // exactly one package to act on, so open its system app page directly and leave the
+            // disable/force-stop decision to the driver.
+            card.addView(label(getString(R.string.settings_ecarx_disable_amap_hint), 14, MUTED))
+            card.addView(button(getString(R.string.settings_ecarx_disable_amap), false) {
+                openAmapAppSettings()
             }, matchButton(8, 56))
             // The arrow-channel tests are calibration aids; this switch keeps them out of release
             // builds when they are not needed.
@@ -5987,42 +5988,19 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             .setPositiveButton(getString(R.string.close), null).show()
     }
 
-    private fun showEcarxNavPackages() {
-        Thread({
-            val packages: List<EcarxNavPackageProbe.NavPackage> =
-                runCatching { EcarxNavPackageProbe.scan(this@DiPlayActivity) }
-                    .getOrElse { emptyList() }
-            handler.post {
-                if (!isFinishing && !isDestroyed) showEcarxNavPackages(packages)
-            }
-        }, "diplay-nav-packages").apply { isDaemon = true }.start()
-    }
-
-    private fun showEcarxNavPackages(packages: List<EcarxNavPackageProbe.NavPackage>) {
-        val body = column().apply { setPadding(dp(24), dp(12), dp(24), dp(12)) }
-        body.addView(label(getString(R.string.settings_ecarx_nav_packages_hint), 14, MUTED))
-        if (packages.isEmpty()) {
-            body.addView(label(getString(R.string.settings_ecarx_nav_packages_empty), 14, TEXT))
-        } else {
-            body.addView(label(EcarxNavPackageProbe.report(packages), 12, TEXT).apply {
-                typeface = Typeface.MONOSPACE
-                setTextIsSelectable(true)
-            })
-            packages.forEach { pkg ->
-                val name = pkg.label.ifEmpty { pkg.packageName }
-                body.addView(button("$name · ${pkg.packageName}", false) {
-                    openSystem(
-                        Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.parse("package:${pkg.packageName}"),
-                        ),
-                    )
-                }, matchButton(8, 56))
-            }
+    /** Opens AMap's system app page so the driver can disable or force-stop it. */
+    private fun openAmapAppSettings() {
+        val installed = runCatching { packageManager.getPackageInfo(AMAP_PACKAGE, 0) }.isSuccess
+        if (!installed) {
+            toast(getString(R.string.settings_ecarx_disable_amap_missing))
+            return
         }
-        appDialogBuilder().setTitle(getString(R.string.settings_ecarx_nav_packages))
-            .setView(ScrollView(appDialogContext()).apply { addView(body) })
-            .setPositiveButton(getString(R.string.close), null).show()
+        openSystem(
+            Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:$AMAP_PACKAGE"),
+            ),
+        )
     }
     private fun permissionHelp(title: String, body: String) {
         appDialogBuilder().setTitle(title).setMessage(body).setPositiveButton(getString(R.string.app_settings)) { _, _ ->
@@ -6887,5 +6865,8 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
          * default. The code behind it stays in place; flip this to true to bring it back.
          */
         private const val SHOW_ECARX_ARROW_TESTS = true
+
+        /** Package name of the stock AMap (高德) app that feeds the cluster lane channel. */
+        private const val AMAP_PACKAGE = "com.autonavi.amapauto"
     }
 }

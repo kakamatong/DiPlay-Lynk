@@ -163,18 +163,15 @@ Proxy 对非 void 返回值一律返回类型默认值（false/0/null/""），�
 
 如果 180 秒内一条 `cb.*` 都没有，说明这条回调也不推送导航/车道数据；下一步再试 `updateNavigationAppState(true)`，或者确认原车导航的数据只在车机内部。
 
-## 6.8 原车高德/ECARX 车道服务（2026-10-23）
+## 6.8 原车高德车道服务（2026-10-23，2026-10-24 改为固定包名）
 
-实车确认：路口车道箭头来自**车机自带的高德/ECARX 导航服务**，即使高德 App 没有启动也会推送；它不是 CarPlay 的 `0x5204`，也不是 DiPlay 的 `updateLaneInfo`，所以 DiPlay 侧读不到、也控制不了。
+实车确认：路口车道箭头来自**车机自带的高德导航服务**，即使高德 App 没有启动也会推送；它不是 CarPlay 的 `0x5204`，也不是 DiPlay 的 `updateLaneInfo`，所以 DiPlay 侧读不到、也控制不了。
 
-Settings → Advanced → ECARX 新增 **Navigation packages (experimental)**：
+Settings → Advanced → ECARX 新增 **停用高德地图（实验性）**：
 
-- 扫描已安装包，筛出名字/服务可能和导航、地图、车道相关的候选，并列出它们的 `services`（enabled/exported）；
-- 每个候选包是一个按钮，点开就是系统应用详情页，可在那里停用/强行停止；
-- 扫描只读 PackageManager，不会自动改包状态；系统级服务可能需要在应用页或 ADB 才能停用；
-- 常见候选：`ecarx.naviservice`、`com.autonavi.amapauto`、包含 `amap/gaode/navi/map/lane` 的包。
-
-停用原车导航服务可能连带影响原车地图、HUD 或仪表车道；先记录包名/服务名，必要时用 `pm enable` 或应用页恢复。
+- 不再扫描已安装包；按钮直接打开固定包名 `AMAP_PACKAGE`（见 `DiPlayActivity`）的系统应用详情页，由用户自己点停用/强行停止；
+- 代码只检查该包是否存在，不存在时提示“没有找到高德地图”；DiPlay 不会自动改包状态；
+- 停用原车高德可能连带影响原车地图、HUD 或仪表车道；需要恢复时在应用页重新启用，或用 `pm enable <包名>`。
 
 ## 7. 当前假设（按可能性排序）
 
@@ -202,7 +199,7 @@ Settings → Advanced → ECARX 新增 **Navigation packages (experimental)**：
 - `EcarxDimApi.kt`：`updateLaneInfo()`、`updateLaneInfoEmpty()`、`getLaneInfo`
 - `EcarxLaneProbe.kt`：4 轮 spy + `readLaneInfo()` 读取探针 + 全量方法 dump
 - `EcarxNavCallbackProbe.kt`：`registerNavigationInteractionCallback` 的 Proxy 探针
-- `EcarxNavPackageProbe.kt`：列出可能提供原车车道的包/服务
+- `DiPlayActivity.openAmapAppSettings()`：打开高德系统应用页（包名常量 `AMAP_PACKAGE`）
 - `EcarxHudBridge.kt`：`endLocked()` 的空数组清理、`probeLaneInfo()`、每秒 `pollLaneInfoLocked()`、`navCallback`
 - `RouteGuidanceState.kt`：`0x5204` / `0x5201` 车道解析
 - `docs/ROUTE_GUIDANCE_PROTOCOL.md`：0x5204 / 0x5201 协议

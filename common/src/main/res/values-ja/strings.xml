@@ -1027,9 +1027,9 @@
     <string name="settings_ecarx_turn_arrow">矢印アイコンの送信（実験的機能）</string>
     <string name="settings_ecarx_turn_arrow_description">各操作の転回矢印を ECARX の turn ID アイコンとしてクラスターへ送ります。既定でオン。オフにするとクラスター自身の矢印のままになります。</string>
     <string name="settings_ecarx_lane_probe">ILaneInfo の調査（実験的機能）</string>
-    <string name="settings_ecarx_nav_packages">ナビゲーション パッケージ（実験的機能）</string>
-    <string name="settings_ecarx_nav_packages_hint">パッケージをタップしてシステムのアプリ設定を開き、そこで無効化または強制停止します。</string>
-    <string name="settings_ecarx_nav_packages_empty">一致するナビゲーション パッケージはありません。</string>
+    <string name="settings_ecarx_disable_amap">AMap を無効化（実験的機能）</string>
+    <string name="settings_ecarx_disable_amap_hint">AMap のシステム アプリ設定を開きます。そこで無効化または強制停止してください。</string>
+    <string name="settings_ecarx_disable_amap_missing">このヘッドユニットに AMap がありません。</string>
     <string name="settings_ecarx_lane_probe_title">ILaneInfo 調査結果</string>
     <string name="settings_ecarx_lane_probe_hint">ILaneInfo のメソッドを一覧し、プロキシの車線を送って車が実際に読む getter を記録します。停車中にのみ実行してください。DIM ナビゲーションのハンドルが必要です。</string>
     <string name="settings_ecarx_unavailable">車が要求を拒否しました</string>
