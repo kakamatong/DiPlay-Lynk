@@ -1066,42 +1066,6 @@ internal object EcarxHudBridge {
         return path
     }
 
-    // ---------------------------------------------------------------- lane probe (diagnostic)
-
-    /**
-     * Dumps the opaque `ILaneInfo` contract and runs spy passes through `updateLaneInfo` and
-     * `updateNavigationInfo`. Runs on a worker thread; [onResult] is called on that thread, so
-     * the caller must post to its own UI thread.
-     */
-    fun probeLaneInfo(appContext: Context, onResult: (String) -> Unit) {
-        Thread({
-            val report = runCatching {
-                initialize(appContext)
-                val naviRef = synchronized(lock) {
-                    if (available) {
-                        reclaimLocked()
-                        navi
-                    } else {
-                        null
-                    }
-                }
-                if (naviRef == null) {
-                    "ECARX DIM navigation interface is not ready. Open CarPlay once, then retry."
-                } else {
-                    // Leave the last spy lanes on the cluster so they can be inspected. The next
-                    // live guidance frame (or session end) overwrites/clears them; an active route
-                    // is never stopped here.
-                    val laneReport = EcarxLaneProbe.probe(naviRef)
-                    val callbackReport = EcarxNavCallbackProbe.start(naviRef)
-                    laneReport + "\n\nnav callback probe:\n" + callbackReport
-                }
-            }.getOrElse { error ->
-                "lane probe failed: " + error.javaClass.simpleName + ": " + error.message
-            }
-            onResult(report)
-        }, "diplay-ecarx-lane-probe").apply { isDaemon = true }.start()
-    }
-
     /** One-line state for the settings diagnostics block. */
     fun diagnostics(context: Context): String = buildString {
         append("ecarx ").append(EcarxCapabilities.describe(context))

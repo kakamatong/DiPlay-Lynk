@@ -2405,15 +2405,6 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                 getString(R.string.settings_ecarx_turn_arrow_description), ecarx.turnArrowExperimental(this)) { on ->
                 ecarx.setTurnArrowExperimental(this, on)
             }
-            // Diagnostic: recover the opaque ILaneInfo contract from the running system image.
-            card.addView(label(getString(R.string.settings_ecarx_lane_probe_hint), 14, MUTED))
-            card.addView(button(getString(R.string.settings_ecarx_lane_probe), false) {
-                ecarx.probeLaneInfo(this@DiPlayActivity) { report ->
-                    handler.post {
-                        if (!isFinishing && !isDestroyed) showEcarxLaneProbe(report)
-                    }
-                }
-            }, matchButton(8, 56))
             // The stock AMap app feeds the cluster lane channel independently of DiPlay. There is
             // exactly one package to act on, so open its system app page directly and leave the
             // disable/force-stop decision to the driver.
@@ -5872,18 +5863,6 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             setTextIsSelectable(true)
         })
         appDialogBuilder().setTitle(getString(R.string.view_diagnostic_report))
-            .setView(ScrollView(appDialogContext()).apply { addView(body) })
-            .setPositiveButton(getString(R.string.close), null).show()
-    }
-
-    /** The ILaneInfo probe output, selectable so it can be copied back into an issue. */
-    private fun showEcarxLaneProbe(report: String) {
-        val body = column().apply { setPadding(dp(24), dp(12), dp(24), dp(12)) }
-        body.addView(label(report, 13, TEXT).apply {
-            typeface = Typeface.MONOSPACE
-            setTextIsSelectable(true)
-        })
-        appDialogBuilder().setTitle(getString(R.string.settings_ecarx_lane_probe_title))
             .setView(ScrollView(appDialogContext()).apply { addView(body) })
             .setPositiveButton(getString(R.string.close), null).show()
     }

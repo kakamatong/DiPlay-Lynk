@@ -1,3 +1,8 @@
+# DiPlay 0.3.30 — 2026-10-24
+
+- Remove the ILaneInfo probe entry from Settings together with its result dialog, bridge entry point and the unused strings in all bundled languages.
+- Lane polling and live lane delivery are unchanged.
+
 # DiPlay 0.3.29 — 2026-10-24
 
 - Remove the arrow-channel test entries from Settings (turn-ID sweeps, bitmap and SVG tests); live arrow output is unchanged.

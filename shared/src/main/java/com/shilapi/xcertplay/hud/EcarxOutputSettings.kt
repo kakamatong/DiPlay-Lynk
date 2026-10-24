@@ -127,15 +127,5 @@ object EcarxOutputSettings {
     /** The last step a test pushed, or null when none has run in this process. */
     fun arrowTestStep(): EcarxArrowTestStep? = EcarxHudBridge.arrowTestStep()
 
-    // ---------------------------------------------------------------- lane probe (diagnostic)
-
-    /**
-     * Dumps the `ILaneInfo` contract and runs spy passes through both lane entry points.
-     * [onResult] runs on a worker thread.
-     */
-    fun probeLaneInfo(context: Context, onResult: (String) -> Unit) {
-        EcarxHudBridge.probeLaneInfo(context, onResult)
-    }
-
     private fun prefs(context: Context) = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 }

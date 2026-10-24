@@ -984,11 +984,8 @@
     <string name="settings_ecarx_navi_mode_on">優先使用 CarPlay 導航</string>
     <string name="settings_ecarx_turn_arrow">傳送轉向箭頭（實驗性）</string>
     <string name="settings_ecarx_turn_arrow_description">把每個機動動作的轉向箭頭以 ECARX turn ID 圖示傳送到儀表。預設開啟；關閉後儀表保留自己的箭頭。</string>
-    <string name="settings_ecarx_lane_probe">探測 ILaneInfo（實驗性）</string>
     <string name="settings_ecarx_disable_amap">停用高德地圖（實驗性）</string>
     <string name="settings_ecarx_disable_amap_hint">開啟高德的系統應用程式頁面，在那裡點「停用」或「強制停止」。</string>
     <string name="settings_ecarx_disable_amap_missing">這台車機上找不到高德地圖。</string>
-    <string name="settings_ecarx_lane_probe_title">ILaneInfo 探測結果</string>
-    <string name="settings_ecarx_lane_probe_hint">先列出 ILaneInfo 的方法，再推送幾條代理車道，記錄車機實際讀取的 getter。請僅在停車時執行；代理推送需要 DIM 導航句柄。</string>
     <string name="settings_ecarx_unavailable">車機拒絕了這次請求</string>
 </resources>

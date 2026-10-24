@@ -924,11 +924,8 @@
     <string name="settings_ecarx_navi_mode_on">Preferir la navegación de CarPlay</string>
     <string name="settings_ecarx_turn_arrow">Enviar iconos de flecha (experimental)</string>
     <string name="settings_ecarx_turn_arrow_description">Envía la flecha de cada maniobra como icono turn ID de ECARX. Activado por defecto; desactívalo para que el cuadro use su propia flecha.</string>
-    <string name="settings_ecarx_lane_probe">Sondear ILaneInfo (experimental)</string>
     <string name="settings_ecarx_disable_amap">Desactivar AMap (experimental)</string>
     <string name="settings_ecarx_disable_amap_hint">Abre la página de la app AMap en el sistema; desactívala o fuerza su detención allí.</string>
     <string name="settings_ecarx_disable_amap_missing">AMap no está instalado en esta unidad.</string>
-    <string name="settings_ecarx_lane_probe_title">Resultado de la sonda ILaneInfo</string>
-    <string name="settings_ecarx_lane_probe_hint">Enumera los métodos de ILaneInfo y luego envía carriles proxy para registrar los getters que lee el coche. Ejecútalo con el coche parado; la sonda necesita el control de navegación DIM.</string>
     <string name="settings_ecarx_unavailable">El coche rechazó la solicitud</string>
 </resources>

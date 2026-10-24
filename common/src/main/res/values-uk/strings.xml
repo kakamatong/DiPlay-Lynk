@@ -936,11 +936,8 @@
     <string name="settings_ecarx_navi_mode_on">Надавати перевагу навігації CarPlay</string>
     <string name="settings_ecarx_turn_arrow">Надсилання значків стрілок (експериментально)</string>
     <string name="settings_ecarx_turn_arrow_description">Надсилає стрілку кожного маневру як значок turn ID ECARX. Увімкнено за замовчуванням; вимкніть, щоб панель показувала свою стрілку.</string>
-    <string name="settings_ecarx_lane_probe">Перевірка ILaneInfo (експериментально)</string>
     <string name="settings_ecarx_disable_amap">Вимкнути AMap (експериментально)</string>
     <string name="settings_ecarx_disable_amap_hint">Відкриває системну сторінку застосунку AMap; вимкніть або примусово зупиніть його там.</string>
     <string name="settings_ecarx_disable_amap_missing">AMap не встановлено на цьому головному пристрої.</string>
-    <string name="settings_ecarx_lane_probe_title">Результат перевірки ILaneInfo</string>
-    <string name="settings_ecarx_lane_probe_hint">Спочатку виводить методи ILaneInfo, потім надсилає проксі-смуги й записує гетери, які читає автомобіль. Запускайте лише на автомобілі, що стоїть; для надсилання потрібен навігаційний дескриптор DIM.</string>
     <string name="settings_ecarx_unavailable">Автомобіль відхилив запит</string>
 </resources>

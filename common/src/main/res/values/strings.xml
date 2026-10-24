@@ -1028,11 +1028,8 @@
     <string name="settings_ecarx_navi_mode_on">Prefer CarPlay navigation</string>
     <string name="settings_ecarx_turn_arrow">Send arrow icons (experimental)</string>
     <string name="settings_ecarx_turn_arrow_description">Sends each maneuver\'s arrow as an ECARX turn-ID icon. On by default; turn it off to let the cluster keep its own arrow.</string>
-    <string name="settings_ecarx_lane_probe">Probe ILaneInfo (experimental)</string>
     <string name="settings_ecarx_disable_amap">Disable AMap (experimental)</string>
     <string name="settings_ecarx_disable_amap_hint">Opens AMap\'s system app page; turn it off or force-stop it there.</string>
     <string name="settings_ecarx_disable_amap_missing">AMap is not installed on this head unit.</string>
-    <string name="settings_ecarx_lane_probe_title">ILaneInfo probe</string>
-    <string name="settings_ecarx_lane_probe_hint">Lists the ILaneInfo methods, then pushes spy lanes and records the getters the car reads. Run it while parked; the spy needs the DIM navigation handle.</string>
     <string name="settings_ecarx_unavailable">The car rejected the request</string>
 </resources>

@@ -973,11 +973,8 @@
     <string name="settings_ecarx_navi_mode_on">تفضيل ملاحة CarPlay</string>
     <string name="settings_ecarx_turn_arrow">إرسال رموز الأسهم (تجريبي)</string>
     <string name="settings_ecarx_turn_arrow_description">يرسل سهم كل مناورة كرمز turn ID من ECARX. مُفعّل افتراضيًا؛ أوقفه لتترك للوحة العدادات سهمها الخاص.</string>
-    <string name="settings_ecarx_lane_probe">فحص ILaneInfo (تجريبي)</string>
     <string name="settings_ecarx_disable_amap">تعطيل AMap (تجريبي)</string>
     <string name="settings_ecarx_disable_amap_hint">يفتح صفحة تطبيق AMap في إعدادات النظام؛ عطّله أو أوقفه قسراً هناك.</string>
     <string name="settings_ecarx_disable_amap_missing">AMap غير مثبّت على هذه الشاشة.</string>
-    <string name="settings_ecarx_lane_probe_title">نتيجة فحص ILaneInfo</string>
-    <string name="settings_ecarx_lane_probe_hint">يعرض طرق ILaneInfo أولًا، ثم يرسل مسارات وكلاء ويسجّل الـ getters التي يقرأها نظام السيارة. شغّله أثناء الوقوف فقط؛ يحتاج الإرسال إلى مقبض ملاحة DIM.</string>
     <string name="settings_ecarx_unavailable">رفضت السيارة الطلب</string>
 </resources>
