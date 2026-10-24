@@ -943,24 +943,4 @@
     <string name="settings_ecarx_lane_probe_title">Результат перевірки ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Спочатку виводить методи ILaneInfo, потім надсилає проксі-смуги й записує гетери, які читає автомобіль. Запускайте лише на автомобілі, що стоїть; для надсилання потрібен навігаційний дескриптор DIM.</string>
     <string name="settings_ecarx_unavailable">Автомобіль відхилив запит</string>
-    <string name="settings_ecarx_arrow_test">Перевірка ID повороту 100–130 (експериментально)</string>
-    <string name="settings_ecarx_arrow_test_high">Перевірка ID повороту 131–200 (експериментально)</string>
-    <string name="settings_ecarx_arrow_test_description">Кожна кнопка надсилає лише відповідний виклик стрілки, по одному кроку кожні 2 секунди; повторне натискання починає спочатку. ID повороту йдуть від 100 до 130 і від 131 до 200, а тести растру й SVG перебирають базові маневри: прямо, поворот, розворот, круговий рух, прибуття.</string>
-    <string name="settings_ecarx_arrow_test_idle">Перевірку не запущено</string>
-    <string name="settings_ecarx_arrow_test_current">Поточний ID %1$d</string>
-    <string name="settings_ecarx_bitmap_test">Перевірка стрілок растром (експериментально)</string>
-    <string name="settings_ecarx_svg_test">Перевірка стрілок SVG (експериментально)</string>
-    <string name="settings_ecarx_arrow_bitmap_step">Растр %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_svg_step">SVG %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_shape_straight">Прямо</string>
-    <string name="settings_ecarx_arrow_shape_slight_left">Плавно вліво</string>
-    <string name="settings_ecarx_arrow_shape_left">Вліво</string>
-    <string name="settings_ecarx_arrow_shape_sharp_left">Різко вліво</string>
-    <string name="settings_ecarx_arrow_shape_slight_right">Плавно вправо</string>
-    <string name="settings_ecarx_arrow_shape_right">Вправо</string>
-    <string name="settings_ecarx_arrow_shape_sharp_right">Різко вправо</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_left">Розворот вліво</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_right">Розворот вправо</string>
-    <string name="settings_ecarx_arrow_shape_roundabout">Круговий рух</string>
-    <string name="settings_ecarx_arrow_shape_destination">Прибуття</string>
 </resources>

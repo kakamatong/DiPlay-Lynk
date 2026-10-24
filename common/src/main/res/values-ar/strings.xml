@@ -980,24 +980,4 @@
     <string name="settings_ecarx_lane_probe_title">نتيجة فحص ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">يعرض طرق ILaneInfo أولًا، ثم يرسل مسارات وكلاء ويسجّل الـ getters التي يقرأها نظام السيارة. شغّله أثناء الوقوف فقط؛ يحتاج الإرسال إلى مقبض ملاحة DIM.</string>
     <string name="settings_ecarx_unavailable">رفضت السيارة الطلب</string>
-    <string name="settings_ecarx_arrow_test">اختبار معرّفات الانعطاف 100–130 (تجريبي)</string>
-    <string name="settings_ecarx_arrow_test_high">اختبار معرّفات الانعطاف 131–200 (تجريبي)</string>
-    <string name="settings_ecarx_arrow_test_description">يرسل كل زر استدعاء سهم الانعطاف الخاص به فقط، خطوة واحدة كل ثانيتين؛ اضغط مرة أخرى لإعادة البدء. تمتد معرّفات الانعطاف عبر 100–130 و131–200، بينما تمرّ اختبارات الصور النقطية وSVG على المناورات الأساسية: مستقيم، انعطاف، دوران للخلف، دوار، الوصول.</string>
-    <string name="settings_ecarx_arrow_test_idle">لا يوجد اختبار قيد التشغيل</string>
-    <string name="settings_ecarx_arrow_test_current">المعرّف الحالي %1$d</string>
-    <string name="settings_ecarx_bitmap_test">اختبار أسهم الانعطاف النقطية (تجريبي)</string>
-    <string name="settings_ecarx_svg_test">اختبار أسهم الانعطاف بصيغة SVG (تجريبي)</string>
-    <string name="settings_ecarx_arrow_bitmap_step">نقطية %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_svg_step">SVG %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_shape_straight">مستقيم</string>
-    <string name="settings_ecarx_arrow_shape_slight_left">يسار قليلًا</string>
-    <string name="settings_ecarx_arrow_shape_left">يسار</string>
-    <string name="settings_ecarx_arrow_shape_sharp_left">يسار حاد</string>
-    <string name="settings_ecarx_arrow_shape_slight_right">يمين قليلًا</string>
-    <string name="settings_ecarx_arrow_shape_right">يمين</string>
-    <string name="settings_ecarx_arrow_shape_sharp_right">يمين حاد</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_left">دوران للخلف إلى اليسار</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_right">دوران للخلف إلى اليمين</string>
-    <string name="settings_ecarx_arrow_shape_roundabout">دوار</string>
-    <string name="settings_ecarx_arrow_shape_destination">الوصول</string>
 </resources>

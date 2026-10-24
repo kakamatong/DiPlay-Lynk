@@ -2,7 +2,7 @@
 
 > 2026-10-21 · 领克 05 / DCY11 · 来源：实车 `updateTurnByTurnArrow(int)` 100–130 全有图标，结合原厂 turn 名称整理。
 
-`EcarxHudBridge` 的正式箭头通道使用这张表；`turnArrowSvg()` 只保留给 Settings 的 SVG 标定测试。
+`EcarxHudBridge` 的正式箭头通道使用这张表；`turnArrowSvg()` 只保留为诊断 API，Settings 的标定入口已移除。
 
 ## 图标 ID
 

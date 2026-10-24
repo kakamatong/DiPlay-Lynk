@@ -931,24 +931,4 @@
     <string name="settings_ecarx_lane_probe_title">Resultado de la sonda ILaneInfo</string>
     <string name="settings_ecarx_lane_probe_hint">Enumera los métodos de ILaneInfo y luego envía carriles proxy para registrar los getters que lee el coche. Ejecútalo con el coche parado; la sonda necesita el control de navegación DIM.</string>
     <string name="settings_ecarx_unavailable">El coche rechazó la solicitud</string>
-    <string name="settings_ecarx_arrow_test">Probar ID de giro 100–130 (experimental)</string>
-    <string name="settings_ecarx_arrow_test_high">Probar ID de giro 131–200 (experimental)</string>
-    <string name="settings_ecarx_arrow_test_description">Cada botón envía solo su llamada de flecha, un paso cada 2 segundos; vuelve a pulsar para reiniciar. Los ID de giro van del 100 al 130 y del 131 al 200, y las pruebas de mapa de bits y SVG recorren las maniobras básicas: recto, giros, cambio de sentido, rotonda y llegada.</string>
-    <string name="settings_ecarx_arrow_test_idle">Ninguna prueba en curso</string>
-    <string name="settings_ecarx_arrow_test_current">ID actual %1$d</string>
-    <string name="settings_ecarx_bitmap_test">Probar flechas en mapa de bits (experimental)</string>
-    <string name="settings_ecarx_svg_test">Probar flechas en SVG (experimental)</string>
-    <string name="settings_ecarx_arrow_bitmap_step">Mapa de bits %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_svg_step">SVG %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_shape_straight">Recto</string>
-    <string name="settings_ecarx_arrow_shape_slight_left">Ligeramente a la izquierda</string>
-    <string name="settings_ecarx_arrow_shape_left">Izquierda</string>
-    <string name="settings_ecarx_arrow_shape_sharp_left">Giro cerrado a la izquierda</string>
-    <string name="settings_ecarx_arrow_shape_slight_right">Ligeramente a la derecha</string>
-    <string name="settings_ecarx_arrow_shape_right">Derecha</string>
-    <string name="settings_ecarx_arrow_shape_sharp_right">Giro cerrado a la derecha</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_left">Cambio de sentido a la izquierda</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_right">Cambio de sentido a la derecha</string>
-    <string name="settings_ecarx_arrow_shape_roundabout">Rotonda</string>
-    <string name="settings_ecarx_arrow_shape_destination">Llegada</string>
 </resources>

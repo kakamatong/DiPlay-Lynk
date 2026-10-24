@@ -992,24 +992,4 @@
     <string name="settings_ecarx_lane_probe_title">ILaneInfo 探测结果</string>
     <string name="settings_ecarx_lane_probe_hint">先列出 ILaneInfo 的方法，再推送几条代理车道，记录车机实际读取的 getter。请仅在停车时运行；代理推送需要 DIM 导航句柄。</string>
     <string name="settings_ecarx_unavailable">车机拒绝了这次请求</string>
-    <string name="settings_ecarx_arrow_test">测试转向 ID 100–130（实验性）</string>
-    <string name="settings_ecarx_arrow_test_high">测试转向 ID 131–200（实验性）</string>
-    <string name="settings_ecarx_arrow_test_description">四个按钮各自只调用对应的转向箭头接口，每 2 秒推进一步；再次按下会从头开始。转向 ID 分为 100–130 和 131–200 两段，位图和 SVG 测试依次送直行、转向、掉头、环岛、到达等基本图形。</string>
-    <string name="settings_ecarx_arrow_test_idle">未在测试</string>
-    <string name="settings_ecarx_arrow_test_current">当前 ID %1$d</string>
-    <string name="settings_ecarx_bitmap_test">测试箭头位图（实验性）</string>
-    <string name="settings_ecarx_svg_test">测试箭头 SVG（实验性）</string>
-    <string name="settings_ecarx_arrow_bitmap_step">位图 %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_svg_step">SVG %1$d/%2$d · %3$s</string>
-    <string name="settings_ecarx_arrow_shape_straight">直行</string>
-    <string name="settings_ecarx_arrow_shape_slight_left">左前</string>
-    <string name="settings_ecarx_arrow_shape_left">左转</string>
-    <string name="settings_ecarx_arrow_shape_sharp_left">左急转</string>
-    <string name="settings_ecarx_arrow_shape_slight_right">右前</string>
-    <string name="settings_ecarx_arrow_shape_right">右转</string>
-    <string name="settings_ecarx_arrow_shape_sharp_right">右急转</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_left">左掉头</string>
-    <string name="settings_ecarx_arrow_shape_u_turn_right">右掉头</string>
-    <string name="settings_ecarx_arrow_shape_roundabout">环岛</string>
-    <string name="settings_ecarx_arrow_shape_destination">到达</string>
 </resources>

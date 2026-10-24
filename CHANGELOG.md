@@ -1,3 +1,8 @@
+# DiPlay 0.3.29 — 2026-10-24
+
+- Remove the arrow-channel test entries from Settings (turn-ID sweeps, bitmap and SVG tests); live arrow output is unchanged.
+- Drop the now-unused test strings in all bundled languages and the settings inventory entry.
+
 # DiPlay 0.3.28 — 2026-10-24
 
 - Replace the navigation-package scanner with a single "Disable AMap" entry: it opens the stock AMap (`com.autonavi.amapauto`) system app page so the driver can disable or force-stop it manually.
