@@ -5,14 +5,18 @@
 
 ## 结论
 
-上游确实更新了，可以同步。建议用 **merge upstream 到同步分支**，不要 rebase 81 个领克提交。
+上游确实更新了，已按 **merge upstream 到同步分支** 执行，没有 rebase 81 个领克提交。
 
-已在临时 worktree `/tmp/lynk-merge-test` 做过一次完整试合并：
+**执行结果（2026-11-03）**
 
-- 17 个冲突文件、18 个冲突块；全部机械冲突，没有需要重写架构的冲突。
-- 手工解法后 `:common:compileDebugKotlin :shared:compileDebugKotlin :mobile:compileDebugKotlin` **BUILD SUCCESSFUL**。
-- 唯一已确认失败的测试是 `SettingsTranslationsTest`：新增的韩语/土耳其语缺 14 个 `settings_ecarx_*` 文案；补齐即可。
-- 试合并没有改真实分支，只在 /tmp 验证。
+- 同步分支：`sync/upstream-0.2.22`
+- 合并提交：`8c39b992`（17 个冲突文件、18 个冲突块）
+- 发布提交：`28f736b9`（0.3.31 / versionCode 72，补齐韩语、土耳其语）
+- 完整 CI：`BUILD SUCCESSFUL`（16m 8s，含 shared/common/home 单测与三模块 lint/assemble）
+- release APK：`/root/diplay-out/DiPlay-lynk-0.3.31.apk`（19,130,297 bytes）
+- SHA-256：`7f387700208020c4999a34eb14d76fda37e7108749be9b1686ea932e222f2e0d`
+- 签名：与 0.3.30 相同的 platform 证书，可直接覆盖升级
+- 尚未合并回 `merge/lynk-main`，等待实车回归
 
 ## 差距数据
 
