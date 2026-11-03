@@ -1,6 +1,7 @@
 # ECARX（领克 05）移植参考笔记
 
 > 建立时间：2026-10-18 · 分支 `car/lynk-ecarx` · 基线 **upstream v0.2.21**
+> 2026-11-03：已同步 upstream **v0.2.22**（merge 提交见 `sync/upstream-0.2.22`）。
 
 ## 目的
 

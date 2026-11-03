@@ -1050,4 +1050,18 @@
     <string name="connection_help_hotspot_interface_not_found">연결 설정에서 저장된 핫스팟 편집을 누르고 핫스팟 인터페이스(선택 사항)를 비운 뒤 다시 시도하세요.</string>
     <string name="connection_help_car_hotspot_off">차량 설정에서 차량 핫스팟을 켠 뒤 다시 시도하세요.</string>
     <string name="last_connection_attempt">마지막 연결 시도(%1$s): %2$s</string>
+    <string name="settings_ecarx_title">계기판 내비게이션 (ECARX)</string>
+    <string name="settings_ecarx_navigation">계기판 내비게이션</string>
+    <string name="settings_ecarx_navigation_description">ECARX DIM 인터페이스를 통해 CarPlay의 회전 화살표, 거리, 도로명을 차량 계기판으로 보냅니다. 데이터는 헤드 유닛 밖으로 나가지 않습니다.</string>
+    <string name="settings_ecarx_presentation">계기판에 화면 미러링</string>
+    <string name="settings_ecarx_presentation_description">현재 DiPlay 화면을 계기판에도 표시하도록 차량에 요청합니다. 플랫폼이 수락 여부를 알려주지 않으므로 계기판을 직접 확인하세요.</string>
+    <string name="settings_ecarx_navi_mode">계기판 내비게이션 모드</string>
+    <string name="settings_ecarx_navi_mode_off">차량 자체 소스 사용</string>
+    <string name="settings_ecarx_navi_mode_on">CarPlay 내비게이션 우선</string>
+    <string name="settings_ecarx_turn_arrow">화살표 아이콘 보내기 (실험 기능)</string>
+    <string name="settings_ecarx_turn_arrow_description">각 안내의 화살표를 ECARX 회전 ID 아이콘으로 보냅니다. 기본으로 켜져 있으며, 끄면 계기판이 자체 화살표를 유지합니다.</string>
+    <string name="settings_ecarx_disable_amap">AMap 비활성화 (실험 기능)</string>
+    <string name="settings_ecarx_disable_amap_hint">AMap의 시스템 앱 페이지를 엽니다. 거기서 비활성화하거나 강제 종료하세요.</string>
+    <string name="settings_ecarx_disable_amap_missing">이 헤드 유닛에 AMap이 설치되어 있지 않습니다.</string>
+    <string name="settings_ecarx_unavailable">차량이 요청을 거부했습니다</string>
 </resources>

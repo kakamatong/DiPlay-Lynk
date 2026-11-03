@@ -12,7 +12,7 @@
 
 | 来源 | 地址 | 用途 |
 |---|---|---|
-| DiPlay（上游） | https://github.com/shihabal3amri/DiPlay | 基线代码，v0.2.21，GPL-3.0 |
+| DiPlay（上游） | https://github.com/shihabal3amri/DiPlay | 基线代码，v0.2.22，GPL-3.0 |
 | DiPlay-ECARX（参考实现） | https://github.com/jiopia/DiPlay-ECARX | ECARX / 亿咖通平台适配参考 |
 
 上游版权归其作者所有；本仓库仅包含平台适配与本地化改动。原始 README 保留为 `README.upstream.md`、`README.upstream.zh-CN.md`、`README.upstream.zh-TW.md`。
@@ -66,7 +66,7 @@ export DIPLAY_AUTH_ASSETS_DIR=/path/to/mfi-assets   # 内含 offline-mfi/
 ```
 
 - 包名：`com.kakamatong.diplay.lynk`（debug 变体后缀 `.hudtest`）
-- 版本：versionCode 62 / versionName 0.3.21（领克移植线独立版本号，从 0.3.0 起与上游区分）
+- 版本：versionCode 72 / versionName 0.3.31（领克移植线独立版本号，从 0.3.0 起与上游区分）
 - 签名：AOSP platform 测试密钥；只对 `test-keys` 固件的车机有效
 
 没有 MFi 资产时 App 能安装启动，但 CarPlay 无法完成认证。

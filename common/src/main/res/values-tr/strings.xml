@@ -1042,4 +1042,18 @@
     <string name="wifi_direct_channel_unavailable">Wi-Fi Direct tercih edilen kanalı kullanamıyor</string>
     <string name="settings_existing_wifi_interface">Ağ arayüzü (isteğe bağlı)</string>
     <string name="settings_existing_wifi_interface_description">Yalnızca yerel ağ (LAN) bağlantısı Android\'in Wi-Fi olarak bildirmediği bir arayüzde (örneğin eth1 üzerindeki bir USB ağ kartı) çalışan üniteler içindir. Otomatik seçilmesi için boş bırakın.</string>
+    <string name="settings_ecarx_title">Gösterge paneli navigasyonu (ECARX)</string>
+    <string name="settings_ecarx_navigation">Gösterge panelinde navigasyon</string>
+    <string name="settings_ecarx_navigation_description">CarPlay dönüş oklarını, mesafeyi ve sokak adlarını ECARX DIM arayüzü üzerinden aracın gösterge panelinine gönderir. Veriler ana üniteden dışarı çıkmaz.</string>
+    <string name="settings_ecarx_presentation">Ekranı gösterge panelinde yansıt</string>
+    <string name="settings_ecarx_presentation_description">Geçerli DiPlay ekranının gösterge panelinde de gösterilmesini araçtan ister. Platform kabul edilip edilmediğini bildirmez; gösterge panelini kendiniz kontrol edin.</string>
+    <string name="settings_ecarx_navi_mode">Gösterge paneli navigasyon modu</string>
+    <string name="settings_ecarx_navi_mode_off">Aracın kendi kaynağını bırak</string>
+    <string name="settings_ecarx_navi_mode_on">CarPlay navigasyonunu tercih et</string>
+    <string name="settings_ecarx_turn_arrow">Ok simgelerini gönder (deneysel)</string>
+    <string name="settings_ecarx_turn_arrow_description">Her manevranın okunu ECARX dönüş kimliği simgesi olarak gönderir. Varsayılan olarak açıktır; kapatırsanız gösterge paneli kendi okunu korur.</string>
+    <string name="settings_ecarx_disable_amap">AMap\'ı devre dışı bırak (deneysel)</string>
+    <string name="settings_ecarx_disable_amap_hint">AMap sistem uygulaması sayfasını açar; oradan devre dışı bırakın veya zorla durdurun.</string>
+    <string name="settings_ecarx_disable_amap_missing">AMap bu ana ünitede yüklü değil.</string>
+    <string name="settings_ecarx_unavailable">Araç isteği reddetti</string>
 </resources>
