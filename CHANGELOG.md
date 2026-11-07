@@ -1,3 +1,8 @@
+# DiPlay 0.3.32 — 2026-11-07
+
+- 导航结束后先清空仪表箭头、距离、路名和车道，最后再通知 ECARX 停止；避免箭头面板残留一个距离单位 “m”。
+- 领克线默认开启音频焦点（设置里仍可手动关闭）。
+
 # DiPlay 0.3.31 — 2026-11-03
 
 - Merge upstream DiPlay v0.2.22: wireless hotspot and audio fixes, connection guidance, security hardening, Korean and Turkish, ECARX wheel speed/gear, lane-guidance declaration and the Lynk & Co 03 cluster map.

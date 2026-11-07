@@ -66,7 +66,7 @@ export DIPLAY_AUTH_ASSETS_DIR=/path/to/mfi-assets   # 内含 offline-mfi/
 ```
 
 - 包名：`com.kakamatong.diplay.lynk`（debug 变体后缀 `.hudtest`）
-- 版本：versionCode 72 / versionName 0.3.31（领克移植线独立版本号，从 0.3.0 起与上游区分）
+- 版本：versionCode 73 / versionName 0.3.32（领克移植线独立版本号，从 0.3.0 起与上游区分）
 - 签名：AOSP platform 测试密钥；只对 `test-keys` 固件的车机有效
 
 没有 MFi 资产时 App 能安装启动，但 CarPlay 无法完成认证。
