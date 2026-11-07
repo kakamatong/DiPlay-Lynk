@@ -54,6 +54,7 @@ class AudioFocusSettingsTest {
         val activity = Robolectric.buildActivity(DiPlayActivity::class.java).get()
         activity.setTheme(android.R.style.Theme_Material_NoActionBar)
         activity.getSharedPreferences("xcertplay_airplay", 0).edit().clear().commit()
+        assertTrue(AirPlayPersistence.loadAudioFocusEnabled(activity))
         assertFalse(AirPlayPersistence.loadNavigationPromptAudioFocus(activity))
         val page = LinearLayout(activity)
         DiPlayActivity::class.java.getDeclaredMethod("audioFocusControls", LinearLayout::class.java)
@@ -66,8 +67,10 @@ class AudioFocusSettingsTest {
         }
         val mute = switches.single { it.contentDescription == activity.getString(R.string.audio_focus_auto_yield) }
         assertSame(mute.parent.parent, prompts.parent.parent)
-        assertEquals(View.GONE, (prompts.parent.parent as View).visibility)
+        assertEquals(View.VISIBLE, (prompts.parent.parent as View).visibility)
         assertFalse(prompts.isChecked)
+        focus.isChecked = false
+        assertEquals(View.GONE, (prompts.parent.parent as View).visibility)
         focus.isChecked = true
         assertEquals(View.VISIBLE, (prompts.parent.parent as View).visibility)
         prompts.isChecked = true

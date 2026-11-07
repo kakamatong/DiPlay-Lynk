@@ -262,7 +262,9 @@ object AirPlayPersistence {
 
     fun loadAudioFocusEnabled(context: Context): Boolean =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getBoolean(KEY_AUDIO_FOCUS_ENABLED, false)
+            // Lynk/ECARX line: media focus is on by default; the settings switch can still
+            // turn it off on head units that mishandle focus.
+            .getBoolean(KEY_AUDIO_FOCUS_ENABLED, true)
 
     fun saveAudioFocusEnabled(context: Context, enabled: Boolean) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
