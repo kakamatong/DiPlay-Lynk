@@ -689,13 +689,16 @@ internal object EcarxHudBridge {
     private fun endLocked() {
         val naviRef = navi
         if (naviRef != null) {
-            EcarxDimApi.notifyTurnByTurnStopped(naviRef)
+            // Clear the fields while the panel is still open, then stop last. The cluster treats
+            // any distance update as "navigation is live" and re-renders the distance row, so a
+            // -1 sent *after* notifyTurnByTurnStopped leaves a lone "m" unit behind on the panel.
             // 0 is the "no arrow" value; without it the cluster keeps the last turn icon.
             EcarxDimApi.updateTurnByTurnArrow(naviRef, 0)
             // -1 is the "no distance" value; 0 leaves a "0 m" label behind.
             EcarxDimApi.updateDistanceToNextGuidancePoint(naviRef, -1L)
             EcarxDimApi.updateNextGuidancePointName(naviRef, "")
             EcarxDimApi.updateLaneInfoEmpty(naviRef)
+            EcarxDimApi.notifyTurnByTurnStopped(naviRef)
         }
         lastPushed = null
         if (guidanceActive) {
