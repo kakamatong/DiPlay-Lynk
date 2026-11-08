@@ -1051,7 +1051,7 @@ object AirPlayPersistence {
             ?: if (AdbClusterRouter.enabled(context) && !loadLegacyClusterEnabled(context)) {
                 CarPlayClusterDisplay.Content.INSTRUMENTS
             } else {
-                CarPlayClusterDisplay.Content.MAP_WITH_CUSTOM_CARD
+                CarPlayClusterDisplay.Content.MAP
             }
 
     fun saveClusterContent(context: Context, content: CarPlayClusterDisplay.Content) {
