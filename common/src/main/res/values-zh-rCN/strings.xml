@@ -1039,6 +1039,8 @@
 
     <string name="settings_ecarx_media_probe">ECARX 音乐接口探针</string>
 
+    <string name="settings_ecarx_media_probe_running">正在探测，约 6 秒…</string>
+
     <string name="settings_ecarx_media_probe_clear">清除音乐探针</string>
 
     <string name="settings_ecarx_media_probe_title">ECARX 音乐接口探针</string>

@@ -2461,6 +2461,7 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             // car exposes and pushes one fake frame with a lyric field.
             card.addView(button(getString(R.string.settings_ecarx_media_probe), false) {
                 val activity = this
+                toast(getString(R.string.settings_ecarx_media_probe_running))
                 Thread({
                     val result = runCatching { ecarx.runMediaProbe(activity) }
                         .getOrElse { "probe failed: " + it.javaClass.simpleName + ": " + it.message }

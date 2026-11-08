@@ -1082,6 +1082,8 @@
 
     <string name="settings_ecarx_media_probe">ECARX media probe</string>
 
+    <string name="settings_ecarx_media_probe_running">Probing, about 6 seconds…</string>
+
     <string name="settings_ecarx_media_probe_clear">Clear media probe</string>
 
     <string name="settings_ecarx_media_probe_title">ECARX media probe</string>

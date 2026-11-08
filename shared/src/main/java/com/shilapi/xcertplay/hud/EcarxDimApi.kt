@@ -129,6 +129,36 @@ internal object EcarxDimApi {
     fun updateMediaMuteState(media: Any, muted: Int): EcarxResult =
         callInt(media, "updateMediaMuteState", muted)
 
+    fun updateCurrentSourceType(media: Any, sourceType: Int): EcarxResult =
+        callInt(media, "updateCurrentSourceType", sourceType)
+
+    fun updatePlaylist(media: Any, sourceType: Int, items: List<Any>): EcarxResult =
+        call(
+            media,
+            "updatePlaylist",
+            arrayOf(Int::class.javaPrimitiveType!!, List::class.java),
+            arrayOf<Any?>(sourceType, items),
+            "updatePlaylist",
+        )
+
+    fun setMediaInteractionCallback(media: Any, callback: Any, callbackType: Class<*>): EcarxResult =
+        call(
+            media,
+            "setMediaInteractionCallback",
+            arrayOf(callbackType),
+            arrayOf<Any?>(callback),
+            "setMediaInteractionCallback",
+        )
+
+    fun unsetMediaInteractionCallback(media: Any, callback: Any, callbackType: Class<*>): EcarxResult =
+        call(
+            media,
+            "unsetMediaInteractionCallback",
+            arrayOf(callbackType),
+            arrayOf<Any?>(callback),
+            "unsetMediaInteractionCallback",
+        )
+
     fun phoneCallInteraction(dim: Any): Any? = read(dim, "getPhoneCallInteraction")
 
     /**
