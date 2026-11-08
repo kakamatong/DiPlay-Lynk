@@ -40,7 +40,7 @@ class ClusterMusicTest {
         val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
         val view = ClusterMusicView(controller.get())
         controller.get().setContentView(view)
-        assertFalse(ClusterMusicSettings.enabled(context))
+        assertTrue(ClusterMusicSettings.enabled(context))
         ClusterMusicSettings.saveEnabled(context, true)
         val track = CarPlayNowPlaying(title = "Song", artist = "Artist", playing = true)
         ClusterMusicState.publish(track, null); idle()
@@ -185,6 +185,10 @@ class ClusterMusicTest {
         controller.get().setContentView(view)
         ClusterMusicSettings.saveEnabled(context, true)
         ClusterMusicSettings.savePermanent(context, true)
+        // This test samples the card's centre; pin the layout so a future default does not move it.
+        ClusterMusicSettings.save(context, "x", 50)
+        ClusterMusicSettings.save(context, "y", 75)
+        ClusterMusicSettings.save(context, "size", 100)
         view.layout(0, 0, 1280, 480)
         val red = Bitmap.createBitmap(16, 16, Bitmap.Config.ARGB_8888).apply { eraseColor(Color.RED) }
         val blue = Bitmap.createBitmap(16, 16, Bitmap.Config.ARGB_8888).apply { eraseColor(Color.BLUE) }
