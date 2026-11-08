@@ -1035,15 +1035,7 @@
 
     <string name="settings_ecarx_auto_present">CarPlay 连接成功后自动投屏到仪表盘</string>
 
-    <string name="settings_ecarx_auto_present_description">CarPlay 连接成功后，自动请求车机把 DiPlay 画面投到仪表盘。上面的「仪表盘同步投屏」仍需开启。平台不回传是否成功，请以仪表实际显示为准。</string>
-
-    <string name="settings_ecarx_media_probe">ECARX 音乐接口探针</string>
-
-    <string name="settings_ecarx_media_probe_running">正在探测，约 6 秒…</string>
-
-    <string name="settings_ecarx_media_probe_clear">清除音乐探针</string>
-
-    <string name="settings_ecarx_media_probe_title">ECARX 音乐接口探针</string>
+    <string name="settings_ecarx_auto_present_description">CarPlay 连接成功后，自动开启「仪表盘同步投屏」并把 DiPlay 画面投到仪表盘。平台不回传是否成功，请以仪表实际显示为准。</string>
 
     <string name="settings_ecarx_navi_mode">仪表导航模式</string>
 

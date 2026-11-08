@@ -185,7 +185,14 @@ internal object EcarxHudBridge {
     fun startOnCarPlay() = synchronized(lock) {
         val app = context ?: return@synchronized
         if (!EcarxOutputSettings.autoPresentOnCarPlay(app)) return@synchronized
-        resumePresentation()
+        // This switch is the explicit request to project on connection. The old projection
+        // switch may have been turned off for the native-media test; turn it back on so the
+        // settings screen and the projection watch agree.
+        if (!EcarxOutputSettings.presentationSwitch(app)) {
+            runCatching { EcarxOutputSettings.setPresentationSwitch(app, true) }
+        }
+        presentationWanted = true
+        if (available) requestPresentationLocked()
     }
 
     /** Resolves the DIM handles once per process. Safe to call from any thread; idempotent. */

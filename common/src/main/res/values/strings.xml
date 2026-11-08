@@ -1078,15 +1078,7 @@
 
     <string name="settings_ecarx_auto_present">Project to the cluster after CarPlay connects</string>
 
-    <string name="settings_ecarx_auto_present_description">Arms the cluster projection when a CarPlay session becomes active. The screen-mirroring switch above still has to be on. The car does not report whether the cluster accepted it, so check the cluster itself.</string>
-
-    <string name="settings_ecarx_media_probe">ECARX media probe</string>
-
-    <string name="settings_ecarx_media_probe_running">Probing, about 6 seconds…</string>
-
-    <string name="settings_ecarx_media_probe_clear">Clear media probe</string>
-
-    <string name="settings_ecarx_media_probe_title">ECARX media probe</string>
+    <string name="settings_ecarx_auto_present_description">Turns on the cluster projection when a CarPlay session becomes active, so the DiPlay screen is mirrored without touching the switch above. The car does not report whether the cluster accepted it, so check the cluster itself.</string>
 
     <string name="settings_ecarx_navi_mode">Cluster navigation mode</string>
 

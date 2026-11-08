@@ -125,11 +125,6 @@ object EcarxOutputSettings {
 
     fun diagnosticReport(context: Context): String = EcarxHudBridge.diagnostics(context)
 
-    /** Diagnostic-only: dumps the media contract and pushes a fake lyric frame. */
-    fun runMediaProbe(context: Context): String = EcarxMediaProbe.run(context)
-
-    fun clearMediaProbe(context: Context): String = EcarxMediaProbe.clear(context)
-
     // ---------------------------------------------------------------- arrow-channel tests (diagnostic)
 
     /**
