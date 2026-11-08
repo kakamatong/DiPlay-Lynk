@@ -42,7 +42,7 @@ class AdbClusterSelectionTest {
         }
         try {
             assertFalse(AdbClusterRouter.enabled(app))
-            assertEquals(com.shilapi.xcertplay.airplay.CarPlayClusterDisplay.Content.MAP,
+            assertEquals(com.shilapi.xcertplay.airplay.CarPlayClusterDisplay.Content.MAP_WITH_CUSTOM_CARD,
                 AirPlayPersistence.loadClusterContent(app))
         }
         finally { ShadowDisplayManager.removeDisplay(id) }
@@ -69,7 +69,7 @@ class AdbClusterSelectionTest {
         assertTrue(AirPlayPersistence.loadClusterMapEnabled(app))
         assertTrue(AirPlayPersistence.loadLegacyClusterEnabled(app))
         assertFalse(AirPlayPersistence.loadAdbClusterEnabled(app))
-        assertEquals(com.shilapi.xcertplay.airplay.CarPlayClusterDisplay.Content.MAP,
+        assertEquals(com.shilapi.xcertplay.airplay.CarPlayClusterDisplay.Content.MAP_WITH_CUSTOM_CARD,
             AirPlayPersistence.loadClusterContent(app))
         AirPlayPersistence.saveAdbClusterEnabled(app, true)
         assertFalse(AirPlayPersistence.loadLegacyClusterEnabled(app))

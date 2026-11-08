@@ -19,14 +19,14 @@ class ClusterTurnCardOverlayTest {
     }
 
     @Test
-    fun defaultSitsOnTheRightOfThePanel() {
+    fun defaultSitsOnTheLeftOfThePanel() {
         val card = ClusterTurnCardOverlay.card(
             1920, 720,
             ClusterTurnCardOverlay.DEFAULT_X_PERCENT,
             ClusterTurnCardOverlay.DEFAULT_Y_PERCENT,
             55,
         )
-        assertTrue(card.left > 1920 / 2)
+        assertTrue(card.left < 1920 / 2)
         assertTrue(card.top < 720 / 2)
         assertTrue(card.left + card.width <= 1920)
         assertTrue(card.top + card.height <= 720)

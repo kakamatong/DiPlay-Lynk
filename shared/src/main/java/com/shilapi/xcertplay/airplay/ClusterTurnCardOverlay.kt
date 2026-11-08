@@ -11,12 +11,12 @@ object ClusterTurnCardOverlay {
     data class CardRect(val left: Int, val top: Int, val width: Int, val height: Int)
 
     const val STEP_PERCENT = 1
-    const val DEFAULT_X_PERCENT = 76
+    const val DEFAULT_X_PERCENT = 27
     const val DEFAULT_Y_PERCENT = 30
     val xPercents = (8..92 step 1).toList()
-    /** Opacity choices for the slider: 20..100 in steps of 5, default 85. */
+    /** Opacity choices for the slider: 20..100 in steps of 5, default 70. */
     val opacityPercents = listOf(20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100)
-    const val DEFAULT_OPACITY_PERCENT = 85
+    const val DEFAULT_OPACITY_PERCENT = 70
 
     val yPercents = (12..72 step 1).toList()
 

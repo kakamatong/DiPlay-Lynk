@@ -1048,7 +1048,11 @@ object AirPlayPersistence {
     fun loadClusterContent(context: Context): CarPlayClusterDisplay.Content =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_CLUSTER_CONTENT, null)
             ?.let { name -> CarPlayClusterDisplay.Content.entries.firstOrNull { it.name == name } }
-            ?: if (AdbClusterRouter.enabled(context) && !loadLegacyClusterEnabled(context)) CarPlayClusterDisplay.Content.INSTRUMENTS else CarPlayClusterDisplay.Content.MAP
+            ?: if (AdbClusterRouter.enabled(context) && !loadLegacyClusterEnabled(context)) {
+                CarPlayClusterDisplay.Content.INSTRUMENTS
+            } else {
+                CarPlayClusterDisplay.Content.MAP_WITH_CUSTOM_CARD
+            }
 
     fun saveClusterContent(context: Context, content: CarPlayClusterDisplay.Content) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(KEY_CLUSTER_CONTENT, content.name).apply()
@@ -1291,6 +1295,7 @@ object AirPlayPersistence {
         } else when (prefs.getString(KEY_CLUSTER_TURN_CARD_OVERLAY_POSITION, null)) {
             "LEFT" -> 20
             "CENTER" -> 50
+            "RIGHT" -> 76
             else -> ClusterTurnCardOverlay.DEFAULT_X_PERCENT
         }
         return ClusterTurnCardOverlay.snap(raw, ClusterTurnCardOverlay.xPercents)
