@@ -2457,6 +2457,37 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                 getString(R.string.settings_ecarx_turn_arrow_description), ecarx.turnArrowExperimental(this)) { on ->
                 ecarx.setTurnArrowExperimental(this, on)
             }
+            // Diagnostic-only: the ECARX media contract is not documented, so this dumps what the
+            // car exposes and pushes one fake frame with a lyric field.
+            card.addView(button(getString(R.string.settings_ecarx_media_probe), false) {
+                val activity = this
+                Thread({
+                    val result = runCatching { ecarx.runMediaProbe(activity) }
+                        .getOrElse { "probe failed: " + it.javaClass.simpleName + ": " + it.message }
+                    activity.runOnUiThread {
+                        val body = TextView(activity).apply {
+                            text = result
+                            textSize = 12f
+                            typeface = Typeface.MONOSPACE
+                            setTextIsSelectable(true)
+                            setPadding(dp(12), dp(8), dp(12), dp(8))
+                        }
+                        appDialogBuilder()
+                            .setTitle(getString(R.string.settings_ecarx_media_probe_title))
+                            .setView(ScrollView(activity).apply { addView(body) })
+                            .setPositiveButton(getString(R.string.close), null)
+                            .show()
+                    }
+                }, "diplay-ecarx-media-probe").start()
+            }, matchButton(8, 56))
+            card.addView(button(getString(R.string.settings_ecarx_media_probe_clear), false) {
+                val activity = this
+                Thread({
+                    val result = runCatching { ecarx.clearMediaProbe(activity) }
+                        .getOrElse { "clear failed: " + it.message }
+                    activity.runOnUiThread { toast(result) }
+                }, "diplay-ecarx-media-probe-clear").start()
+            }, matchButton(0, 52))
             // The stock AMap app feeds the cluster lane channel independently of DiPlay. There is
             // exactly one package to act on, so open its system app page directly and leave the
             // disable/force-stop decision to the driver.

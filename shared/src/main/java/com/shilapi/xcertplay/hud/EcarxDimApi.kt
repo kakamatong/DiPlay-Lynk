@@ -104,6 +104,31 @@ internal object EcarxDimApi {
 
     fun mediaInteraction(dim: Any): Any? = read(dim, "getMediaInteraction")
 
+    /** Pushes one media card frame; [info] is a proxy implementing [infoType]. */
+    fun updatePlaybackInfo(media: Any, info: Any, infoType: Class<*>): EcarxResult =
+        call(media, "updatePlaybackInfo", arrayOf(infoType), arrayOf<Any?>(info), "updatePlaybackInfo")
+
+    fun updateCurrentProgress(media: Any, positionMillis: Long): EcarxResult =
+        call(
+            media,
+            "updateCurrentProgress",
+            arrayOf(Long::class.javaPrimitiveType!!),
+            arrayOf<Any?>(positionMillis),
+            "updateCurrentProgress($positionMillis)",
+        )
+
+    fun updateMediaSourceTypeList(media: Any, types: IntArray): EcarxResult =
+        call(
+            media,
+            "updateMediaSourceTypeList",
+            arrayOf(IntArray::class.java),
+            arrayOf<Any?>(types),
+            "updateMediaSourceTypeList",
+        )
+
+    fun updateMediaMuteState(media: Any, muted: Int): EcarxResult =
+        callInt(media, "updateMediaMuteState", muted)
+
     fun phoneCallInteraction(dim: Any): Any? = read(dim, "getPhoneCallInteraction")
 
     /**

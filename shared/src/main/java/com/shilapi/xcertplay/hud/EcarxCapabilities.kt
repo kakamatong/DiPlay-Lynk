@@ -18,6 +18,8 @@ object EcarxCapabilities {
     const val NAVI_INFO = "com.ecarx.xui.adaptapi.diminteraction.INaviInteraction\$INavigationInfo"
     const val LANE_INFO = "com.ecarx.xui.adaptapi.diminteraction.INaviInteraction\$ILaneInfo"
     const val MEDIA_INTERACTION = "com.ecarx.xui.adaptapi.diminteraction.IMediaInteraction"
+    const val MEDIA_PLAYBACK_INFO = "com.ecarx.xui.adaptapi.diminteraction.IMediaInteraction\$IPlaybackInfo"
+    const val MEDIA_INFO = "com.ecarx.xui.adaptapi.diminteraction.IMediaInteraction\$IMedia"
     const val PHONE_INTERACTION = "com.ecarx.xui.adaptapi.diminteraction.IPhoneCallInteraction"
     const val CALL_INFO = "com.ecarx.xui.adaptapi.diminteraction.IPhoneCallInteraction\$ICallInfo"
     const val DIM_PROTOCOL_MANAGER = "ecarx.dimprotocol.DIMProtocolManager"
