@@ -178,6 +178,16 @@ internal object EcarxHudBridge {
         override fun onDisplayChanged(displayId: Int) = Unit
     }
 
+    /**
+     * Arms the cluster projection when a CarPlay session becomes active. The driver can still
+     * turn the projection switch off, and [suspendPresentation] turns it off at session end.
+     */
+    fun startOnCarPlay() = synchronized(lock) {
+        val app = context ?: return@synchronized
+        if (!EcarxOutputSettings.autoPresentOnCarPlay(app)) return@synchronized
+        resumePresentation()
+    }
+
     /** Resolves the DIM handles once per process. Safe to call from any thread; idempotent. */
     fun initialize(appContext: Context) = synchronized(lock) {
         if (context != null) return@synchronized
@@ -188,9 +198,8 @@ internal object EcarxHudBridge {
             Log.i(TAG, "DIM interface absent, output disabled: ${EcarxCapabilities.describe(app)}")
             return@synchronized
         }
-        // Seed the watch from the saved intent before the first attempt, so a head unit that comes
-        // back with the engine already running restores the cluster without the user touching it.
-        presentationWanted = EcarxOutputSettings.presentationSwitch(app)
+        // Do not arm the projection here: the switch starts it once CarPlay is active, so the
+        // cluster does not mirror DiPlay's own launcher before a phone connects.
         reclaimLocked()
         // A new process must not inherit an arrow left on the cluster by the previous one.
         endLocked()
@@ -206,7 +215,6 @@ internal object EcarxHudBridge {
         EcarxOutputSettings.naviMode(app)
             .takeIf { it >= 0 }
             ?.let { applyNaviModeLocked(it) }
-        if (presentationWanted) requestPresentationLocked()
         startTickerLocked()
     }
 
