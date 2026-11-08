@@ -170,7 +170,7 @@ internal class ClusterMusicView(context: Context) : View(context) {
         val available = (artRect.width() - pad * 2).toInt().coerceAtLeast(1)
         textPaint.textAlign = Paint.Align.LEFT
         textPaint.color = Color.WHITE
-        textPaint.textSize = side * .125f
+        textPaint.textSize = side * .125f * (ClusterMusicSettings.titleScale(context) / 100f)
         val title = info.title.orEmpty()
         val layout = StaticLayout.Builder.obtain(title, 0, title.length, textPaint, available)
             .setMaxLines(2).setEllipsize(TextUtils.TruncateAt.END).setIncludePad(false).build()

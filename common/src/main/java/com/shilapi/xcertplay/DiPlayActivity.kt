@@ -3866,12 +3866,14 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
             ClusterMusicSettings.savePermanent(this, it == 1)
         }
         listOf(
-            Triple("x", R.string.settings_cluster_music_horizontal, ClusterMusicSettings.x(this)),
-            Triple("y", R.string.settings_cluster_music_vertical, ClusterMusicSettings.y(this)),
-            Triple("size", R.string.settings_cluster_music_size, ClusterMusicSettings.size(this)),
-        ).forEach { (key, title, value) ->
-            card.addView(overlaySliderRow(getString(title),
-                (if (key == "size") 50..300 else 5..95).toList(), value) { "$it%" }.also {
+            Triple("x", R.string.settings_cluster_music_horizontal, 5..95 to ClusterMusicSettings.x(this)),
+            Triple("y", R.string.settings_cluster_music_vertical, 5..95 to ClusterMusicSettings.y(this)),
+            Triple("size", R.string.settings_cluster_music_size, 50..300 to ClusterMusicSettings.size(this)),
+            Triple("title_scale", R.string.settings_cluster_music_title_size,
+                50..150 to ClusterMusicSettings.titleScale(this)),
+        ).forEach { (key, title, spec) ->
+            val (range, value) = spec
+            card.addView(overlaySliderRow(getString(title), range.toList(), value) { "$it%" }.also {
                 it.onSave = { percent -> ClusterMusicSettings.save(this, key, percent) }
                 val head = it.getChildAt(0) as LinearLayout
                 val value = head.getChildAt(head.childCount - 1)

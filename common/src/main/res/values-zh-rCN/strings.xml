@@ -942,6 +942,8 @@
     <string name="settings_cluster_music_horizontal">音乐卡片 · 水平位置</string>
     <string name="settings_cluster_music_vertical">音乐卡片 · 垂直位置</string>
     <string name="settings_cluster_music_size">音乐卡片 · 大小</string>
+
+    <string name="settings_cluster_music_title_size">音乐卡片 · 标题字号</string>
     <string name="settings_cluster_music_unknown">未知艺人</string>
     <string name="connection_help_reset_wifi">旧的 Wi-Fi Direct 连接可能阻止新连接。点击下方的“重置 CarPlay Wi-Fi”，然后重新连接。</string>
     <string name="connection_help_bluetooth_unusable">此车机的蓝牙无法向 iPhone 传输数据，因此无法使用无线 CarPlay。请使用支持数据传输的 USB 线。</string>

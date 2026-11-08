@@ -985,6 +985,8 @@
     <string name="settings_cluster_music_horizontal">Music card · horizontal position</string>
     <string name="settings_cluster_music_vertical">Music card · vertical position</string>
     <string name="settings_cluster_music_size">Music card · size</string>
+
+    <string name="settings_cluster_music_title_size">Music card · title size</string>
     <string name="settings_cluster_music_unknown">Unknown artist</string>
     <string name="connection_help_reset_wifi">An old Wi-Fi Direct group may block this connection. Select Reset CarPlay Wi-Fi below, then connect again.</string>
     <string name="connection_help_bluetooth_unusable">This head unit cannot send Bluetooth data to the iPhone. Wireless CarPlay cannot work here. Use a USB data cable.</string>
