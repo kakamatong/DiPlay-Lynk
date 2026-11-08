@@ -1035,10 +1035,6 @@
 
     <string name="settings_ecarx_presentation_description">请求车机在仪表盘上同时显示 DiPlay 画面。平台不回传是否成功，请以仪表实际显示为准。</string>
 
-    <string name="settings_ecarx_auto_present">CarPlay 连接成功后自动投屏到仪表盘</string>
-
-    <string name="settings_ecarx_auto_present_description">CarPlay 连接成功后，自动开启「仪表盘同步投屏」并把 DiPlay 画面投到仪表盘。平台不回传是否成功，请以仪表实际显示为准。</string>
-
     <string name="settings_ecarx_navi_mode">仪表导航模式</string>
 
     <string name="settings_ecarx_navi_mode_off">保持车机自带导航</string>

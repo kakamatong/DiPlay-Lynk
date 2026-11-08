@@ -373,6 +373,8 @@ class CarPlayController(
             if (replacement) {
                 // ECARX：新会话开始前先清掉上一条会话的箭头，避免旧状态压到新数据上。
                 runCatching { com.shilapi.xcertplay.hud.EcarxHudBridge.clear() }
+                // ECARX：恢复用户保存的仪表投屏开关。
+                runCatching { com.shilapi.xcertplay.hud.EcarxHudBridge.resumePresentation() }
                 BydNavigationOutputs.start(appContext)
                 BydNavigationOutputs.carPlaySessionStarted()
                 com.shilapi.xcertplay.glance.CarPlayGlance.setConnected(true)
@@ -383,8 +385,6 @@ class CarPlayController(
                 }
             }
             activeSession = session
-            // ECARX：CarPlay 连接成功后再开启仪表投屏，不在应用启动时提前投。
-            runCatching { com.shilapi.xcertplay.hud.EcarxHudBridge.startOnCarPlay() }
             val btPrefs = appContext.getSharedPreferences("xcertplay_airplay", android.content.Context.MODE_PRIVATE)
             if (btPrefs.getBoolean("bt_suspend_during_carplay", false)) {
                 // close() marks [closed], and a closing session marks itself before onSessionEnded

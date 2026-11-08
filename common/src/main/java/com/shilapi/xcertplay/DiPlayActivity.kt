@@ -2438,11 +2438,6 @@ class DiPlayActivity : ComponentActivity(), AppAppearanceOwner {
                 ecarx.setPresentationSwitch(this, on)
                 if (!ecarx.requestPresentation(this, on)) toast(getString(R.string.settings_ecarx_unavailable))
             }
-            toggle(card, getString(R.string.settings_ecarx_auto_present),
-                getString(R.string.settings_ecarx_auto_present_description), ecarx.autoPresentOnCarPlay(this)) { on ->
-                ecarx.setAutoPresentOnCarPlay(this, on)
-                if (on) ecarx.requestCarPlayProjection()
-            }
             if (ecarx.naviModeSupported()) {
                 val modes = listOf(ecarx.NAVI_MODE_OFF, ecarx.NAVI_MODE_ON)
                 choice(card, getString(R.string.settings_ecarx_navi_mode),

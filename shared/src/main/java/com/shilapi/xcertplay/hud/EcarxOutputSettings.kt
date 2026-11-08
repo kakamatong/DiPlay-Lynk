@@ -15,7 +15,6 @@ object EcarxOutputSettings {
     private const val KEY_PRESENTATION = "dim_presentation_switch"
     private const val KEY_NAVI_MODE = "dim_navi_mode"
     private const val KEY_ARROW_EXPERIMENTAL = "dim_turn_arrow_experimental"
-    private const val KEY_AUTO_PRESENT_ON_CARPLAY = "dim_auto_present_on_carplay"
 
     /**
      * NAVI_MODE_OFF leaves the cluster's own navigation source alone. Every other value asks the
@@ -58,20 +57,6 @@ object EcarxOutputSettings {
     /** The 仪表投屏 switch: mirrors the centre screen's presentation onto the cluster. */
     fun presentationSwitch(context: Context): Boolean = prefs(context).getBoolean(KEY_PRESENTATION, true)
 
-    /**
-     * Whether a successful CarPlay connection should arm the cluster projection. The projection
-     * switch above still has to be on; this only controls the automatic start, so the cluster is
-     * already mirroring when CarPlay comes up.
-     */
-    fun autoPresentOnCarPlay(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_AUTO_PRESENT_ON_CARPLAY, true)
-
-    fun setAutoPresentOnCarPlay(context: Context, enabled: Boolean) {
-        check(prefs(context).edit().putBoolean(KEY_AUTO_PRESENT_ON_CARPLAY, enabled).commit()) {
-            "Could not persist the ECARX CarPlay projection setting"
-        }
-    }
-
     fun setPresentationSwitch(context: Context, enabled: Boolean) {
         check(prefs(context).edit().putBoolean(KEY_PRESENTATION, enabled).commit()) {
             "Could not persist the ECARX instrument-cluster projection setting"
@@ -111,11 +96,6 @@ object EcarxOutputSettings {
     fun requestPresentation(context: Context, show: Boolean): Boolean {
         EcarxHudBridge.initialize(context)
         return EcarxHudBridge.applyPresentation(show).ok
-    }
-
-    /** Arms the projection when CarPlay becomes active; the saved projection switch still applies. */
-    fun requestCarPlayProjection() {
-        EcarxHudBridge.startOnCarPlay()
     }
 
     fun requestNaviMode(context: Context, mode: Int): Boolean {
