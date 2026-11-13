@@ -40,11 +40,11 @@
 
 | 夜间座舱：仪表盘导航 + 中控 DiPlay | DiPlay 主界面：高德导航 + 音乐卡片 |
 |---|---|
-| <img src="docs/screenshots/lynk-night-cockpit-cluster-and-headunit.jpg" width="420" alt="领克 05 夜间座舱"> | <img src="docs/screenshots/lynk-app-navigation-music.jpg" width="420" alt="DiPlay 主界面"> |
+| <img src="https://raw.githubusercontent.com/kakamatong/DiPlay-Lynk/main/docs/screenshots/lynk-night-cockpit-cluster-and-headunit.jpg" width="420" alt="领克 05 夜间座舱"> | <img src="https://raw.githubusercontent.com/kakamatong/DiPlay-Lynk/main/docs/screenshots/lynk-app-navigation-music.jpg" width="420" alt="DiPlay 主界面"> |
 
 | 仪表盘特写：导航 / 自适应巡航 / 音乐卡片 | HUD 投影：夜间堵车时的转向箭头 |
 |---|---|
-| <img src="docs/screenshots/lynk-cluster-closeup-navigation-music.jpg" width="420" alt="仪表盘特写"> | <img src="docs/screenshots/lynk-hud-projection-night-traffic.jpg" width="420" alt="HUD 转向箭头投影"> |
+| <img src="https://raw.githubusercontent.com/kakamatong/DiPlay-Lynk/main/docs/screenshots/lynk-cluster-closeup-navigation-music.jpg" width="420" alt="仪表盘特写"> | <img src="https://raw.githubusercontent.com/kakamatong/DiPlay-Lynk/main/docs/screenshots/lynk-hud-projection-night-traffic.jpg" width="420" alt="HUD 转向箭头投影"> |
 
 ## 本移植的改动
 
