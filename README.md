@@ -34,6 +34,18 @@
 - ⚠️ **路口车道选择**：未支持到位。高德导航本身不下发车道数据（`0x5204` laneFrames=0），推荐车道无法稳定高亮
 - ⚠️ **车机自带高德**：车机的高德会干扰正常的箭头导航。可在 **设置 → 高级 → ECARX** 里点「停用高德地图」，打开系统应用页后自行停用或强行停止
 
+## 实车展示
+
+领克 05 夜间实车运行效果：
+
+| 夜间座舱：仪表盘导航 + 中控 DiPlay | DiPlay 主界面：高德导航 + 音乐卡片 |
+|---|---|
+| <img src="docs/screenshots/lynk-night-cockpit-cluster-and-headunit.jpg" width="420" alt="领克 05 夜间座舱"> | <img src="docs/screenshots/lynk-app-navigation-music.jpg" width="420" alt="DiPlay 主界面"> |
+
+| 仪表盘特写：导航 / 自适应巡航 / 音乐卡片 | HUD 投影：夜间堵车时的转向箭头 |
+|---|---|
+| <img src="docs/screenshots/lynk-cluster-closeup-navigation-music.jpg" width="420" alt="仪表盘特写"> | <img src="docs/screenshots/lynk-hud-projection-night-traffic.jpg" width="420" alt="HUD 转向箭头投影"> |
+
 ## 本移植的改动
 
 - **仪表盘导航（ECARX DIM）**：把 CarPlay 的转向箭头、剩余距离、路名、ETA 投送到仪表盘。箭头通过 ECARX turn ID 通道（`updateTurnByTurnArrow(int)`）绘制，已在实车确认可用；路口车道选择受限于高德不下发车道数据，未支持到位。全部通过反射调用车机 DIM 接口，不支持的车型上静默跳过。
